@@ -1,25 +1,54 @@
 import "tfplan/v2" as tfplan
 
-# Constantes
-const = {
-  "policy_name": "ec2-ebs-encryption-enabled",
-  "message": "Attribute 'encrypted' must be set to true for 'aws_ebs_volume' resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-7 for more details.",
-  "encrypted": "encrypted",
+policy_name = "ec2-ebs-encryption-enabled"
+message = "Attribute 'encrypted' must be set to true for 'aws_ebs_volume' resources. See AWS Security Hub ec2-7."
+
+violations = []
+
+for _, rc in tfplan.resource_changes {
+  # Filtra apenas o tipo desejado
+  if rc.type is "aws_ebs_volume" {
+    # Ignora recursos que serão removidos
+    if rc.change.after is null {
+      continue
+    }
+
+    # Verifica encrypted de forma segura
+    enc = false
+    if rc.change.after.encrypted is true {
+      enc = true
+    }
+
+    if not enc {
+      # Normaliza valores para evitar nulls que quebram o parser
+      addr = ""
+      if rc.address is not null {
+        addr = rc.address
+      }
+
+      modaddr = ""
+      if rc.module_address is not null {
+        modaddr = rc.module_address
+      }
+
+      violations = append(violations, {
+        "address": addr,
+        "module_address": modaddr,
+        "message": message,
+      })
+    }
+  }
 }
 
-# Filtra todos os recursos aws_ebs_volume planejados (estado pós-aplicar)
-ebs_volumes = filter tfplan.planned_values.resources as _, r {
-  r.mode is "managed" and
-  r.type is "aws_ebs_volume"
+result = {
+  "policy_name": policy_name,
+  "violations_count": length(violations),
+  "violations": violations,
 }
 
-# Rejeita apenas os que NÃO estão criptografados
-violations = filter ebs_volumes as _, v {
-  # Se o atributo não existir, assume false
-  (v.values[const.encrypted] else false) is false
-}
+# Apenas um print final com tipos primitivos
+print(result)
 
-# Regra principal: não pode haver violações
 main = rule {
   length(violations) is 0
 }
