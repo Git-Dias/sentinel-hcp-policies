@@ -1,0 +1,25 @@
+import "tfplan/v2" as tfplan
+
+# Constantes
+const = {
+  "policy_name": "ec2-ebs-encryption-enabled",
+  "message": "Attribute 'encrypted' must be set to true for 'aws_ebs_volume' resources. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/ec2-controls.html#ec2-7 for more details.",
+  "encrypted": "encrypted",
+}
+
+# Filtra todos os recursos aws_ebs_volume planejados (estado pós-aplicar)
+ebs_volumes = filter tfplan.planned_values.resources as _, r {
+  r.mode is "managed" and
+  r.type is "aws_ebs_volume"
+}
+
+# Rejeita apenas os que NÃO estão criptografados
+violations = filter ebs_volumes as _, v {
+  # Se o atributo não existir, assume false
+  (v.values[const.encrypted] else false) is false
+}
+
+# Regra principal: não pode haver violações
+main = rule {
+  length(violations) is 0
+}
