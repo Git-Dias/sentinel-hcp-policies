@@ -15,7 +15,7 @@ import "module" "tfconfig-functions" {
 }
 
 policy "ec2-ebs-encryption-enabled" {
-    source = ./policies/ec2/ec2-ebs-encryption-enabled.sentinel"
+    source = "./policies/ec2/ec2-ebs-encryption-enabled.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
