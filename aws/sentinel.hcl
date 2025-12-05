@@ -18,3 +18,8 @@ policy "s3-block-public-access-bucket-level" {
     source = "./policies/s3/s3-block-public-access-bucket-level.sentinel"
     enforcement_level = "hard-mandatory"
 }
+
+policy "ec2-ebs-encryption-enabled" {
+    source = "./policies/s3/ec2-ebs-encryption-enabled.sentinel"
+    enforcement_level = "hard-mandatory"
+}
