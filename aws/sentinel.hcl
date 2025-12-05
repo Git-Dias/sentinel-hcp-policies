@@ -20,6 +20,6 @@ policy "s3-block-public-access-bucket-level" {
 }
 
 policy "ec2-ebs-encryption-enabled" {
-    source = "./policies/s3/ec2-ebs-encryption-enabled.sentinel"
+    source = "./policies/ec2/ec2-ebs-encryption-enabled.sentinel"
     enforcement_level = "hard-mandatory"
 }
