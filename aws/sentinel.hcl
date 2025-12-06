@@ -30,7 +30,7 @@ policy "s3-require-ssl" {
 }
 
 policy "rds-encryption-at-rest-enabled" {
-    source = "./policies/rds/rds-encryption-at-rest-enabled"
+    source = "./policies/rds/rds-encryption-at-rest-enabled.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
