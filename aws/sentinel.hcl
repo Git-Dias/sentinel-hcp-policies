@@ -29,5 +29,11 @@ policy "s3-require-ssl" {
     enforcement_level = "hard-mandatory"
 }
 
+policy "s3-require-mfa-delete" {
+    source = "./policies/s3/s3-require-mfa-delete.sentinel"
+    enforcement_level = "hard-mandatory"
+}
+
+
 
 
