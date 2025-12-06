@@ -29,6 +29,11 @@ policy "s3-require-ssl" {
     enforcement_level = "hard-mandatory"
 }
 
+policy "rds-encryption-at-rest-enabled" {
+    source = "./policies/rds/rds-encryption-at-rest-enabled"
+    enforcement_level = "hard-mandatory"
+}
+
 
 
 
