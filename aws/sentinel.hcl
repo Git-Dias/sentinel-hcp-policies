@@ -15,17 +15,17 @@ import "module" "tfconfig-functions" {
 }
 
 policy "ec2-ebs-encryption-enabled" {
-    source = "./ec2-ebs-encryption-enabled.sentinel"
+    source = "./policies/ec2/ec2-ebs-encryption-enabled.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
 policy "s3-block-public-access-bucket-level" {
-    source = "./s3-block-public-access-bucket-level.sentinel"
+    source = "./policies/s3/s3-block-public-access-bucket-level.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
 policy "s3-require-ssl" {
-    source = "./s3-require-ssl.sentinel"
+    source = "./policies/s3/s3-require-ssl.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
