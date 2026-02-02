@@ -14,13 +14,13 @@ import "module" "tfconfig-functions" {
   source = "../reusable-functions/tfconfig-functions/tfconfig-functions.sentinel"
 }
 
-policy "s3-require-ssl" {
-    source = "s3/s3-require-ssl.sentinel"
+policy "ec2-ebs-encryption-enabled" {
+    source = "./ec2/ec2-ebs-encryption-enabled.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
-policy "rds-encryption-at-rest-enabled" {
-    source = "rds/rds-encryption-at-rest-enabled.sentinel"
+policy "s3-block-public-access-bucket-level" {
+    source = "./s3/s3-block-public-access-bucket-level.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
