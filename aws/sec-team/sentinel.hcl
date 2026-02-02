@@ -15,12 +15,12 @@ import "module" "tfconfig-functions" {
 }
 
 policy "s3-require-ssl" {
-    source = "../sec-team/s3/s3-require-ssl.sentinel"
+    source = "./s3/s3-require-ssl.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
 policy "rds-encryption-at-rest-enabled" {
-    source = "../sec-team/rds/rds-encryption-at-rest-enabled.sentinel"
+    source = "./rds/rds-encryption-at-rest-enabled.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
