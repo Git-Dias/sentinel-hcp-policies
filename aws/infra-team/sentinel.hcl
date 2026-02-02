@@ -1,0 +1,30 @@
+import "module" "report" {
+  source = "../../reusable-functions/report/report.sentinel"
+}
+
+import "module" "tfresources" {
+  source = "../../reusable-functions/tfresources/tfresources.sentinel"
+}
+
+import "module" "tfplan-functions" {
+  source = "../../reusable-functions/tfplan-functions/tfplan-functions.sentinel"
+}
+
+import "module" "tfconfig-functions" {
+  source = "../../reusable-functions/tfconfig-functions/tfconfig-functions.sentinel"
+}
+
+policy "rds-encryption-at-rest-enabled" {
+    source = "./rds/rds-encryption-at-rest-enabled.sentinel"
+    enforcement_level = "hard-mandatory"
+}
+
+policy "ec2-ebs-encryption-enabled.sentinel" {
+    source = "./ec2/ec2-ebs-encryption-enabled.sentinel"
+    enforcement_level = "hard-mandatory"
+}
+
+
+
+
+
