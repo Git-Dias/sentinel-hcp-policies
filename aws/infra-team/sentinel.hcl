@@ -15,12 +15,12 @@ import "module" "tfconfig-functions" {
 }
 
 policy "ec2-ebs-encryption-enabled" {
-    source = "../infra-team/ec2/ec2-ebs-encryption-enabled.sentinel"
+    source = "./ec2/ec2-ebs-encryption-enabled.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
 policy "s3-block-public-access-bucket-level" {
-    source = "../infra-team/s3/s3-block-public-access-bucket-level.sentinel"
+    source = "./s3/s3-block-public-access-bucket-level.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
