@@ -24,6 +24,11 @@ policy "s3-block-public-access-bucket-level" {
     enforcement_level = "hard-mandatory"
 }
 
+policy "rds-encryption-at-rest-enabled" {
+    source = "./rds/rds-encryption-at-rest-enabled.sentinel"
+    enforcement_level = "hard-mandatory"
+}
+
 
 
 

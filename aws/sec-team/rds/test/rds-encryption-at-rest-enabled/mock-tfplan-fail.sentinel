@@ -1,0 +1,2268 @@
+terraform_version = "1.13.3"
+
+planned_values = {
+	"outputs": {},
+	"resources": {
+		"module.network[0].aws_subnet.db[\"10.0.2.0/24\"]": {
+			"address":        "module.network[0].aws_subnet.db[\"10.0.2.0/24\"]",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          "10.0.2.0/24",
+			"mode":           "managed",
+			"module_address": "module.network[0]",
+			"name":           "db",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_subnet",
+			"values": {
+				"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0fc699ddc69cd3d81",
+				"assign_ipv6_address_on_creation":                false,
+				"availability_zone":                              "us-east-1f",
+				"availability_zone_id":                           "use1-az5",
+				"cidr_block":                                     "10.0.2.0/24",
+				"customer_owned_ipv4_pool":                       "",
+				"enable_dns64":                                   false,
+				"enable_resource_name_dns_a_record_on_launch":    false,
+				"enable_resource_name_dns_aaaa_record_on_launch": false,
+				"id":                                  "subnet-0fc699ddc69cd3d81",
+				"ipv6_cidr_block":                     "",
+				"ipv6_cidr_block_association_id":      "",
+				"ipv6_native":                         false,
+				"map_customer_owned_ip_on_launch":     false,
+				"map_public_ip_on_launch":             false,
+				"outpost_arn":                         "",
+				"owner_id":                            "116981771514",
+				"private_dns_hostname_type_on_launch": "ip-name",
+				"tags": {
+					"Name": "lab-db-10.0.2.0/24",
+					"Type": "db",
+				},
+				"tags_all": {
+					"Name": "lab-db-10.0.2.0/24",
+					"Type": "db",
+				},
+				"timeouts": null,
+				"vpc_id":   "vpc-029ea6423a20c05fe",
+			},
+		},
+		"module.network[0].aws_subnet.public[\"10.0.1.0/24\"]": {
+			"address":        "module.network[0].aws_subnet.public[\"10.0.1.0/24\"]",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          "10.0.1.0/24",
+			"mode":           "managed",
+			"module_address": "module.network[0]",
+			"name":           "public",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_subnet",
+			"values": {
+				"assign_ipv6_address_on_creation":                false,
+				"cidr_block":                                     "10.0.1.0/24",
+				"customer_owned_ipv4_pool":                       null,
+				"enable_dns64":                                   false,
+				"enable_resource_name_dns_a_record_on_launch":    false,
+				"enable_resource_name_dns_aaaa_record_on_launch": false,
+				"ipv6_cidr_block":                                null,
+				"ipv6_native":                                    false,
+				"map_customer_owned_ip_on_launch":                null,
+				"map_public_ip_on_launch":                        true,
+				"outpost_arn":                                    null,
+				"tags": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"tags_all": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"timeouts": null,
+				"vpc_id":   "vpc-029ea6423a20c05fe",
+			},
+		},
+		"module.network[0].aws_vpc.this": {
+			"address":        "module.network[0].aws_vpc.this",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "module.network[0]",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_vpc",
+			"values": {
+				"arn": "arn:aws:ec2:us-east-1:116981771514:vpc/vpc-029ea6423a20c05fe",
+				"assign_generated_ipv6_cidr_block":     false,
+				"cidr_block":                           "10.0.0.0/16",
+				"default_network_acl_id":               "acl-0f602fe713aecb51c",
+				"default_route_table_id":               "rtb-0f8e902fd85aa6d66",
+				"default_security_group_id":            "sg-0d5e31011d7a61d9c",
+				"dhcp_options_id":                      "dopt-0122e1f7e9c886142",
+				"enable_classiclink":                   false,
+				"enable_classiclink_dns_support":       false,
+				"enable_dns_hostnames":                 true,
+				"enable_dns_support":                   true,
+				"enable_network_address_usage_metrics": false,
+				"id":                                   "vpc-029ea6423a20c05fe",
+				"instance_tenancy":                     "default",
+				"ipv4_ipam_pool_id":                    null,
+				"ipv4_netmask_length":                  null,
+				"ipv6_association_id":                  "",
+				"ipv6_cidr_block":                      "",
+				"ipv6_cidr_block_network_border_group": "",
+				"ipv6_ipam_pool_id":                    "",
+				"ipv6_netmask_length":                  0,
+				"main_route_table_id":                  "rtb-0f8e902fd85aa6d66",
+				"owner_id":                             "116981771514",
+				"tags": {
+					"Name": "lab-vpc",
+				},
+				"tags_all": {
+					"Name": "lab-vpc",
+				},
+			},
+		},
+		"module.rds[0].aws_db_instance.this": {
+			"address":        "module.rds[0].aws_db_instance.this",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "module.rds[0]",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_db_instance",
+			"values": {
+				"allocated_storage":               20,
+				"allow_major_version_upgrade":     null,
+				"apply_immediately":               false,
+				"auto_minor_version_upgrade":      true,
+				"blue_green_update":               [],
+				"copy_tags_to_snapshot":           false,
+				"custom_iam_instance_profile":     null,
+				"customer_owned_ip_enabled":       null,
+				"db_name":                         "labdb",
+				"db_subnet_group_name":            "lab-rds-subnet-group",
+				"delete_automated_backups":        true,
+				"deletion_protection":             null,
+				"domain":                          null,
+				"domain_iam_role_name":            null,
+				"enabled_cloudwatch_logs_exports": null,
+				"engine":                              "postgres",
+				"engine_version":                      "14.11",
+				"final_snapshot_identifier":           null,
+				"iam_database_authentication_enabled": null,
+				"instance_class":                      "db.t3.micro",
+				"max_allocated_storage":               null,
+				"monitoring_interval":                 0,
+				"password":                            "REDACTED_SENSITIVE",
+				"performance_insights_enabled":        false,
+				"publicly_accessible":                 false,
+				"replicate_source_db":                 null,
+				"restore_to_point_in_time":            [],
+				"s3_import":                           [],
+				"security_group_names":                null,
+				"skip_final_snapshot":                 true,
+				"storage_encrypted":                   false,
+				"tags": {
+					"Name": "lab-rds",
+				},
+				"tags_all": {
+					"Name": "lab-rds",
+				},
+				"timeouts": null,
+				"username": "adminuser",
+			},
+		},
+		"module.rds[0].aws_db_subnet_group.this": {
+			"address":        "module.rds[0].aws_db_subnet_group.this",
+			"depends_on":     [],
+			"deposed_key":    "",
+			"index":          null,
+			"mode":           "managed",
+			"module_address": "module.rds[0]",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"tainted":        false,
+			"type":           "aws_db_subnet_group",
+			"values": {
+				"description": "Managed by Terraform",
+				"name":        "lab-rds-subnet-group",
+				"subnet_ids": [
+					"subnet-0fc699ddc69cd3d81",
+				],
+				"tags": {
+					"Name": "lab-rds-subnet-group",
+				},
+				"tags_all": {
+					"Name": "lab-rds-subnet-group",
+				},
+			},
+		},
+	},
+}
+
+variables = {
+	"aws_region": {
+		"name":  "aws_region",
+		"value": "us-east-1",
+	},
+	"enable_ec2": {
+		"name":  "enable_ec2",
+		"value": false,
+	},
+	"enable_network": {
+		"name":  "enable_network",
+		"value": true,
+	},
+	"enable_rds": {
+		"name":  "enable_rds",
+		"value": true,
+	},
+	"enable_s3": {
+		"name":  "enable_s3",
+		"value": false,
+	},
+}
+
+resource_changes = {
+	"module.network[0].aws_subnet.db[\"10.0.2.0/24\"]": {
+		"address": "module.network[0].aws_subnet.db[\"10.0.2.0/24\"]",
+		"change": {
+			"actions": [
+				"no-op",
+			],
+			"after": {
+				"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0fc699ddc69cd3d81",
+				"assign_ipv6_address_on_creation":                false,
+				"availability_zone":                              "us-east-1f",
+				"availability_zone_id":                           "use1-az5",
+				"cidr_block":                                     "10.0.2.0/24",
+				"customer_owned_ipv4_pool":                       "",
+				"enable_dns64":                                   false,
+				"enable_resource_name_dns_a_record_on_launch":    false,
+				"enable_resource_name_dns_aaaa_record_on_launch": false,
+				"id":                                  "subnet-0fc699ddc69cd3d81",
+				"ipv6_cidr_block":                     "",
+				"ipv6_cidr_block_association_id":      "",
+				"ipv6_native":                         false,
+				"map_customer_owned_ip_on_launch":     false,
+				"map_public_ip_on_launch":             false,
+				"outpost_arn":                         "",
+				"owner_id":                            "116981771514",
+				"private_dns_hostname_type_on_launch": "ip-name",
+				"tags": {
+					"Name": "lab-db-10.0.2.0/24",
+					"Type": "db",
+				},
+				"tags_all": {
+					"Name": "lab-db-10.0.2.0/24",
+					"Type": "db",
+				},
+				"timeouts": null,
+				"vpc_id":   "vpc-029ea6423a20c05fe",
+			},
+			"after_unknown": {},
+			"before": {
+				"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0fc699ddc69cd3d81",
+				"assign_ipv6_address_on_creation":                false,
+				"availability_zone":                              "us-east-1f",
+				"availability_zone_id":                           "use1-az5",
+				"cidr_block":                                     "10.0.2.0/24",
+				"customer_owned_ipv4_pool":                       "",
+				"enable_dns64":                                   false,
+				"enable_resource_name_dns_a_record_on_launch":    false,
+				"enable_resource_name_dns_aaaa_record_on_launch": false,
+				"id":                                  "subnet-0fc699ddc69cd3d81",
+				"ipv6_cidr_block":                     "",
+				"ipv6_cidr_block_association_id":      "",
+				"ipv6_native":                         false,
+				"map_customer_owned_ip_on_launch":     false,
+				"map_public_ip_on_launch":             false,
+				"outpost_arn":                         "",
+				"owner_id":                            "116981771514",
+				"private_dns_hostname_type_on_launch": "ip-name",
+				"tags": {
+					"Name": "lab-db-10.0.2.0/24",
+					"Type": "db",
+				},
+				"tags_all": {
+					"Name": "lab-db-10.0.2.0/24",
+					"Type": "db",
+				},
+				"timeouts": null,
+				"vpc_id":   "vpc-029ea6423a20c05fe",
+			},
+		},
+		"deposed":        "",
+		"index":          "10.0.2.0/24",
+		"mode":           "managed",
+		"module_address": "module.network[0]",
+		"name":           "db",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_subnet",
+	},
+	"module.network[0].aws_subnet.public[\"10.0.1.0/24\"]": {
+		"address": "module.network[0].aws_subnet.public[\"10.0.1.0/24\"]",
+		"change": {
+			"actions": [
+				"delete",
+				"create",
+			],
+			"after": {
+				"assign_ipv6_address_on_creation":                false,
+				"cidr_block":                                     "10.0.1.0/24",
+				"customer_owned_ipv4_pool":                       null,
+				"enable_dns64":                                   false,
+				"enable_resource_name_dns_a_record_on_launch":    false,
+				"enable_resource_name_dns_aaaa_record_on_launch": false,
+				"ipv6_cidr_block":                                null,
+				"ipv6_native":                                    false,
+				"map_customer_owned_ip_on_launch":                null,
+				"map_public_ip_on_launch":                        true,
+				"outpost_arn":                                    null,
+				"tags": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"tags_all": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"timeouts": null,
+				"vpc_id":   "vpc-029ea6423a20c05fe",
+			},
+			"after_unknown": {
+				"arn":                  true,
+				"availability_zone":    true,
+				"availability_zone_id": true,
+				"id": true,
+				"ipv6_cidr_block_association_id":      true,
+				"owner_id":                            true,
+				"private_dns_hostname_type_on_launch": true,
+				"tags":     {},
+				"tags_all": {},
+			},
+			"before": {
+				"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0bd4936653beb067f",
+				"assign_ipv6_address_on_creation":                false,
+				"availability_zone":                              "us-east-1c",
+				"availability_zone_id":                           "use1-az1",
+				"cidr_block":                                     "10.0.1.0/24",
+				"customer_owned_ipv4_pool":                       "",
+				"enable_dns64":                                   false,
+				"enable_resource_name_dns_a_record_on_launch":    false,
+				"enable_resource_name_dns_aaaa_record_on_launch": false,
+				"id":                                  "subnet-0bd4936653beb067f",
+				"ipv6_cidr_block":                     "",
+				"ipv6_cidr_block_association_id":      "",
+				"ipv6_native":                         false,
+				"map_customer_owned_ip_on_launch":     false,
+				"map_public_ip_on_launch":             true,
+				"outpost_arn":                         "",
+				"owner_id":                            "116981771514",
+				"private_dns_hostname_type_on_launch": "ip-name",
+				"tags": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"tags_all": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"timeouts": null,
+				"vpc_id":   "vpc-029ea6423a20c05fe",
+			},
+		},
+		"deposed":        "",
+		"index":          "10.0.1.0/24",
+		"mode":           "managed",
+		"module_address": "module.network[0]",
+		"name":           "public",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_subnet",
+	},
+	"module.network[0].aws_vpc.this": {
+		"address": "module.network[0].aws_vpc.this",
+		"change": {
+			"actions": [
+				"no-op",
+			],
+			"after": {
+				"arn": "arn:aws:ec2:us-east-1:116981771514:vpc/vpc-029ea6423a20c05fe",
+				"assign_generated_ipv6_cidr_block":     false,
+				"cidr_block":                           "10.0.0.0/16",
+				"default_network_acl_id":               "acl-0f602fe713aecb51c",
+				"default_route_table_id":               "rtb-0f8e902fd85aa6d66",
+				"default_security_group_id":            "sg-0d5e31011d7a61d9c",
+				"dhcp_options_id":                      "dopt-0122e1f7e9c886142",
+				"enable_classiclink":                   false,
+				"enable_classiclink_dns_support":       false,
+				"enable_dns_hostnames":                 true,
+				"enable_dns_support":                   true,
+				"enable_network_address_usage_metrics": false,
+				"id":                                   "vpc-029ea6423a20c05fe",
+				"instance_tenancy":                     "default",
+				"ipv4_ipam_pool_id":                    null,
+				"ipv4_netmask_length":                  null,
+				"ipv6_association_id":                  "",
+				"ipv6_cidr_block":                      "",
+				"ipv6_cidr_block_network_border_group": "",
+				"ipv6_ipam_pool_id":                    "",
+				"ipv6_netmask_length":                  0,
+				"main_route_table_id":                  "rtb-0f8e902fd85aa6d66",
+				"owner_id":                             "116981771514",
+				"tags": {
+					"Name": "lab-vpc",
+				},
+				"tags_all": {
+					"Name": "lab-vpc",
+				},
+			},
+			"after_unknown": {},
+			"before": {
+				"arn": "arn:aws:ec2:us-east-1:116981771514:vpc/vpc-029ea6423a20c05fe",
+				"assign_generated_ipv6_cidr_block":     false,
+				"cidr_block":                           "10.0.0.0/16",
+				"default_network_acl_id":               "acl-0f602fe713aecb51c",
+				"default_route_table_id":               "rtb-0f8e902fd85aa6d66",
+				"default_security_group_id":            "sg-0d5e31011d7a61d9c",
+				"dhcp_options_id":                      "dopt-0122e1f7e9c886142",
+				"enable_classiclink":                   false,
+				"enable_classiclink_dns_support":       false,
+				"enable_dns_hostnames":                 true,
+				"enable_dns_support":                   true,
+				"enable_network_address_usage_metrics": false,
+				"id":                                   "vpc-029ea6423a20c05fe",
+				"instance_tenancy":                     "default",
+				"ipv4_ipam_pool_id":                    null,
+				"ipv4_netmask_length":                  null,
+				"ipv6_association_id":                  "",
+				"ipv6_cidr_block":                      "",
+				"ipv6_cidr_block_network_border_group": "",
+				"ipv6_ipam_pool_id":                    "",
+				"ipv6_netmask_length":                  0,
+				"main_route_table_id":                  "rtb-0f8e902fd85aa6d66",
+				"owner_id":                             "116981771514",
+				"tags": {
+					"Name": "lab-vpc",
+				},
+				"tags_all": {
+					"Name": "lab-vpc",
+				},
+			},
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "module.network[0]",
+		"name":           "this",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_vpc",
+	},
+	"module.rds[0].aws_db_instance.this": {
+		"address": "module.rds[0].aws_db_instance.this",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"allocated_storage":               20,
+				"allow_major_version_upgrade":     null,
+				"apply_immediately":               false,
+				"auto_minor_version_upgrade":      true,
+				"blue_green_update":               [],
+				"copy_tags_to_snapshot":           false,
+				"custom_iam_instance_profile":     null,
+				"customer_owned_ip_enabled":       null,
+				"db_name":                         "labdb",
+				"db_subnet_group_name":            "lab-rds-subnet-group",
+				"delete_automated_backups":        true,
+				"deletion_protection":             null,
+				"domain":                          null,
+				"domain_iam_role_name":            null,
+				"enabled_cloudwatch_logs_exports": null,
+				"engine":                              "postgres",
+				"engine_version":                      "14.11",
+				"final_snapshot_identifier":           null,
+				"iam_database_authentication_enabled": null,
+				"instance_class":                      "db.t3.micro",
+				"max_allocated_storage":               null,
+				"monitoring_interval":                 0,
+				"password":                            "REDACTED_SENSITIVE",
+				"performance_insights_enabled":        false,
+				"publicly_accessible":                 false,
+				"replicate_source_db":                 null,
+				"restore_to_point_in_time":            [],
+				"s3_import":                           [],
+				"security_group_names":                null,
+				"skip_final_snapshot":                 true,
+				"storage_encrypted":                   true,
+				"tags": {
+					"Name": "lab-rds",
+				},
+				"tags_all": {
+					"Name": "lab-rds",
+				},
+				"timeouts": null,
+				"username": "adminuser",
+			},
+			"after_unknown": {
+				"address":                 true,
+				"arn":                     true,
+				"availability_zone":       true,
+				"backup_retention_period": true,
+				"backup_window":           true,
+				"blue_green_update":       [],
+				"ca_cert_identifier":      true,
+				"character_set_name":      true,
+				"endpoint":                true,
+				"engine_version_actual":   true,
+				"hosted_zone_id":          true,
+				"id":                      true,
+				"identifier":              true,
+				"identifier_prefix":       true,
+				"iops":                    true,
+				"kms_key_id":              true,
+				"latest_restorable_time":  true,
+				"license_model":           true,
+				"maintenance_window":      true,
+				"monitoring_role_arn":     true,
+				"multi_az":                true,
+				"name":                    true,
+				"nchar_character_set_name":              true,
+				"network_type":                          true,
+				"option_group_name":                     true,
+				"parameter_group_name":                  true,
+				"performance_insights_kms_key_id":       true,
+				"performance_insights_retention_period": true,
+				"port":                     true,
+				"replica_mode":             true,
+				"replicas":                 true,
+				"resource_id":              true,
+				"restore_to_point_in_time": [],
+				"s3_import":                [],
+				"snapshot_identifier":      true,
+				"status":                   true,
+				"storage_throughput":       true,
+				"storage_type":             true,
+				"tags":                     {},
+				"tags_all":                 {},
+				"timezone":                 true,
+				"vpc_security_group_ids":   true,
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "module.rds[0]",
+		"name":           "this",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_db_instance",
+	},
+	"module.rds[0].aws_db_subnet_group.this": {
+		"address": "module.rds[0].aws_db_subnet_group.this",
+		"change": {
+			"actions": [
+				"create",
+			],
+			"after": {
+				"description": "Managed by Terraform",
+				"name":        "lab-rds-subnet-group",
+				"subnet_ids": [
+					"subnet-0fc699ddc69cd3d81",
+				],
+				"tags": {
+					"Name": "lab-rds-subnet-group",
+				},
+				"tags_all": {
+					"Name": "lab-rds-subnet-group",
+				},
+			},
+			"after_unknown": {
+				"arn":         true,
+				"id":          true,
+				"name_prefix": true,
+				"subnet_ids": [
+					false,
+				],
+				"supported_network_types": true,
+				"tags":     {},
+				"tags_all": {},
+			},
+			"before": null,
+		},
+		"deposed":        "",
+		"index":          null,
+		"mode":           "managed",
+		"module_address": "module.rds[0]",
+		"name":           "this",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_db_subnet_group",
+	},
+}
+
+resource_drift = {
+	"module.network[0].aws_subnet.public[\"10.0.1.0/24\"]": {
+		"address": "module.network[0].aws_subnet.public[\"10.0.1.0/24\"]",
+		"change": {
+			"actions": [
+				"update",
+			],
+			"after": {
+				"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0bd4936653beb067f",
+				"assign_ipv6_address_on_creation":                false,
+				"availability_zone":                              "us-east-1c",
+				"availability_zone_id":                           "use1-az1",
+				"cidr_block":                                     "10.0.1.0/24",
+				"customer_owned_ipv4_pool":                       "",
+				"enable_dns64":                                   false,
+				"enable_resource_name_dns_a_record_on_launch":    false,
+				"enable_resource_name_dns_aaaa_record_on_launch": false,
+				"id":                                  "subnet-0bd4936653beb067f",
+				"ipv6_cidr_block":                     "",
+				"ipv6_cidr_block_association_id":      "",
+				"ipv6_native":                         false,
+				"map_customer_owned_ip_on_launch":     false,
+				"map_public_ip_on_launch":             true,
+				"outpost_arn":                         "",
+				"owner_id":                            "116981771514",
+				"private_dns_hostname_type_on_launch": "ip-name",
+				"tags": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"tags_all": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"timeouts": null,
+				"vpc_id":   "vpc-029ea6423a20c05fe",
+			},
+			"after_unknown": {},
+			"before": {
+				"arn": null,
+				"assign_ipv6_address_on_creation":                false,
+				"availability_zone":                              null,
+				"availability_zone_id":                           null,
+				"cidr_block":                                     "10.0.1.0/24",
+				"customer_owned_ipv4_pool":                       null,
+				"enable_dns64":                                   false,
+				"enable_resource_name_dns_a_record_on_launch":    false,
+				"enable_resource_name_dns_aaaa_record_on_launch": false,
+				"id":                                  "subnet-0bd4936653beb067f",
+				"ipv6_cidr_block":                     null,
+				"ipv6_cidr_block_association_id":      null,
+				"ipv6_native":                         false,
+				"map_customer_owned_ip_on_launch":     null,
+				"map_public_ip_on_launch":             true,
+				"outpost_arn":                         null,
+				"owner_id":                            null,
+				"private_dns_hostname_type_on_launch": null,
+				"tags": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"tags_all": {
+					"Name": "lab-public-10.0.1.0/24",
+					"Type": "public",
+				},
+				"timeouts": null,
+				"vpc_id":   "vpc-029ea6423a20c05fe",
+			},
+		},
+		"deposed":        "",
+		"index":          "10.0.1.0/24",
+		"mode":           "managed",
+		"module_address": "module.network[0]",
+		"name":           "public",
+		"provider_name":  "registry.terraform.io/hashicorp/aws",
+		"type":           "aws_subnet",
+	},
+}
+
+output_changes = {}
+
+raw = {
+	"configuration": {
+		"provider_config": {
+			"aws": {
+				"expressions": {
+					"region": {
+						"references": [
+							"var.aws_region",
+						],
+					},
+				},
+				"full_name":          "registry.terraform.io/hashicorp/aws",
+				"name":               "aws",
+				"version_constraint": "4.52.0",
+			},
+			"random": {
+				"full_name":          "registry.terraform.io/hashicorp/random",
+				"name":               "random",
+				"version_constraint": "3.4.3",
+			},
+		},
+		"root_module": {
+			"module_calls": {
+				"ec2": {
+					"count_expression": {
+						"references": [
+							"var.enable_ec2",
+						],
+					},
+					"expressions": {
+						"instance_count": {
+							"constant_value": 1,
+						},
+						"instance_type": {
+							"constant_value": "t3.micro",
+						},
+						"subnet_id": {
+							"references": [
+								"module.network",
+							],
+						},
+						"vpc_id": {
+							"references": [
+								"module.network",
+							],
+						},
+					},
+					"module": {
+						"outputs": {
+							"instance_ids": {
+								"description": "IDs das instâncias EC2 criadas",
+								"expression": {
+									"references": [
+										"aws_instance.this",
+									],
+								},
+							},
+							"public_ips": {
+								"description": "IPs públicos das instâncias (se houver)",
+								"expression": {
+									"references": [
+										"aws_instance.this",
+									],
+								},
+							},
+						},
+						"resources": [
+							{
+								"address": "aws_ebs_volume.example",
+								"expressions": {
+									"availability_zone": {
+										"constant_value": "us-east-1a",
+									},
+									"encrypted": {
+										"constant_value": false,
+									},
+									"size": {
+										"constant_value": 8,
+									},
+								},
+								"mode":                "managed",
+								"name":                "example",
+								"provider_config_key": "aws",
+								"schema_version":      0,
+								"type":                "aws_ebs_volume",
+							},
+							{
+								"address": "aws_instance.this",
+								"count_expression": {
+									"references": [
+										"var.instance_count",
+									],
+								},
+								"expressions": {
+									"ami": {
+										"references": [
+											"data.aws_ami.ubuntu.id",
+											"data.aws_ami.ubuntu",
+										],
+									},
+									"instance_type": {
+										"references": [
+											"var.instance_type",
+										],
+									},
+									"subnet_id": {
+										"references": [
+											"var.subnet_id",
+										],
+									},
+									"tags": {
+										"references": [
+											"count.index",
+										],
+									},
+								},
+								"mode":                "managed",
+								"name":                "this",
+								"provider_config_key": "aws",
+								"schema_version":      1,
+								"type":                "aws_instance",
+							},
+							{
+								"address": "data.aws_ami.ubuntu",
+								"expressions": {
+									"filter": [
+										{
+											"name": {
+												"constant_value": "name",
+											},
+											"values": {
+												"constant_value": [
+													"ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*",
+												],
+											},
+										},
+										{
+											"name": {
+												"constant_value": "virtualization-type",
+											},
+											"values": {
+												"constant_value": [
+													"hvm",
+												],
+											},
+										},
+									],
+									"most_recent": {
+										"constant_value": true,
+									},
+									"owners": {
+										"constant_value": [
+											"099720109477",
+										],
+									},
+								},
+								"mode":                "data",
+								"name":                "ubuntu",
+								"provider_config_key": "aws",
+								"schema_version":      0,
+								"type":                "aws_ami",
+							},
+						],
+						"variables": {
+							"instance_count": {
+								"default":     1,
+								"description": "Quantidade de instâncias EC2",
+							},
+							"instance_type": {
+								"default":     "t3.micro",
+								"description": "Tipo das instâncias EC2",
+							},
+							"subnet_id": {
+								"description": "Subnet onde as instâncias serão criadas",
+							},
+							"vpc_id": {
+								"description": "ID da VPC onde as instâncias serão criadas",
+							},
+						},
+					},
+					"source": "./modules/ec2",
+				},
+				"network": {
+					"count_expression": {
+						"references": [
+							"var.enable_network",
+						],
+					},
+					"expressions": {
+						"db_subnet_cidrs": {
+							"constant_value": [
+								"10.0.2.0/24",
+							],
+						},
+						"public_subnet_cidrs": {
+							"constant_value": [
+								"10.0.1.0/24",
+							],
+						},
+						"vpc_cidr_block": {
+							"constant_value": "10.0.0.0/16",
+						},
+					},
+					"module": {
+						"outputs": {
+							"db_subnet_ids": {
+								"description": "IDs das subnets de banco de dados",
+								"expression": {
+									"references": [
+										"aws_subnet.db",
+									],
+								},
+							},
+							"public_subnet_ids": {
+								"description": "IDs das subnets públicas",
+								"expression": {
+									"references": [
+										"aws_subnet.public",
+									],
+								},
+							},
+							"vpc_id": {
+								"description": "ID da VPC criada",
+								"expression": {
+									"references": [
+										"aws_vpc.this.id",
+										"aws_vpc.this",
+									],
+								},
+							},
+						},
+						"resources": [
+							{
+								"address": "aws_subnet.db",
+								"expressions": {
+									"cidr_block": {
+										"references": [
+											"each.value",
+										],
+									},
+									"tags": {
+										"references": [
+											"each.value",
+										],
+									},
+									"vpc_id": {
+										"references": [
+											"aws_vpc.this.id",
+											"aws_vpc.this",
+										],
+									},
+								},
+								"for_each_expression": {
+									"references": [
+										"var.db_subnet_cidrs",
+									],
+								},
+								"mode":                "managed",
+								"name":                "db",
+								"provider_config_key": "aws",
+								"schema_version":      1,
+								"type":                "aws_subnet",
+							},
+							{
+								"address": "aws_subnet.public",
+								"expressions": {
+									"cidr_block": {
+										"references": [
+											"each.value",
+										],
+									},
+									"map_public_ip_on_launch": {
+										"constant_value": true,
+									},
+									"tags": {
+										"references": [
+											"each.value",
+										],
+									},
+									"vpc_id": {
+										"references": [
+											"aws_vpc.this.id",
+											"aws_vpc.this",
+										],
+									},
+								},
+								"for_each_expression": {
+									"references": [
+										"var.public_subnet_cidrs",
+									],
+								},
+								"mode":                "managed",
+								"name":                "public",
+								"provider_config_key": "aws",
+								"schema_version":      1,
+								"type":                "aws_subnet",
+							},
+							{
+								"address": "aws_vpc.this",
+								"expressions": {
+									"cidr_block": {
+										"references": [
+											"var.vpc_cidr_block",
+										],
+									},
+									"enable_dns_hostnames": {
+										"constant_value": true,
+									},
+									"enable_dns_support": {
+										"constant_value": true,
+									},
+									"tags": {
+										"constant_value": {
+											"Name": "lab-vpc",
+										},
+									},
+								},
+								"mode":                "managed",
+								"name":                "this",
+								"provider_config_key": "aws",
+								"schema_version":      1,
+								"type":                "aws_vpc",
+							},
+						],
+						"variables": {
+							"db_subnet_cidrs": {
+								"description": "Lista de CIDRs para subnets de banco de dados",
+							},
+							"public_subnet_cidrs": {
+								"description": "Lista de CIDRs para subnets públicas",
+							},
+							"vpc_cidr_block": {
+								"description": "CIDR da VPC",
+							},
+						},
+					},
+					"source": "./modules/network",
+				},
+				"rds": {
+					"count_expression": {
+						"references": [
+							"var.enable_rds",
+						],
+					},
+					"expressions": {
+						"allocated_storage": {
+							"constant_value": 20,
+						},
+						"engine": {
+							"constant_value": "postgres",
+						},
+						"engine_version": {
+							"constant_value": "14.11",
+						},
+						"instance_class": {
+							"constant_value": "db.t3.micro",
+						},
+						"password": {
+							"constant_value": "TroqueEstaSenha123!",
+						},
+						"subnet_ids": {
+							"references": [
+								"module.network",
+							],
+						},
+						"username": {
+							"constant_value": "adminuser",
+						},
+						"vpc_id": {
+							"references": [
+								"module.network",
+							],
+						},
+					},
+					"module": {
+						"outputs": {
+							"endpoint": {
+								"description": "Endpoint do banco RDS",
+								"expression": {
+									"references": [
+										"aws_db_instance.this.address",
+										"aws_db_instance.this",
+									],
+								},
+							},
+							"port": {
+								"description": "Porta do RDS",
+								"expression": {
+									"references": [
+										"aws_db_instance.this.port",
+										"aws_db_instance.this",
+									],
+								},
+							},
+						},
+						"resources": [
+							{
+								"address": "aws_db_instance.this",
+								"expressions": {
+									"allocated_storage": {
+										"references": [
+											"var.allocated_storage",
+										],
+									},
+									"db_name": {
+										"constant_value": "labdb",
+									},
+									"db_subnet_group_name": {
+										"references": [
+											"aws_db_subnet_group.this.name",
+											"aws_db_subnet_group.this",
+										],
+									},
+									"engine": {
+										"references": [
+											"var.engine",
+										],
+									},
+									"engine_version": {
+										"references": [
+											"var.engine_version",
+										],
+									},
+									"instance_class": {
+										"references": [
+											"var.instance_class",
+										],
+									},
+									"password": {
+										"references": [
+											"var.password",
+										],
+									},
+									"publicly_accessible": {
+										"constant_value": false,
+									},
+									"skip_final_snapshot": {
+										"constant_value": true,
+									},
+									"storage_encrypted": {
+										"constant_value": true,
+									},
+									"tags": {
+										"constant_value": {
+											"Name": "lab-rds",
+										},
+									},
+									"username": {
+										"references": [
+											"var.username",
+										],
+									},
+								},
+								"mode":                "managed",
+								"name":                "this",
+								"provider_config_key": "aws",
+								"schema_version":      1,
+								"type":                "aws_db_instance",
+							},
+							{
+								"address": "aws_db_subnet_group.this",
+								"expressions": {
+									"name": {
+										"constant_value": "lab-rds-subnet-group",
+									},
+									"subnet_ids": {
+										"references": [
+											"var.subnet_ids",
+										],
+									},
+									"tags": {
+										"constant_value": {
+											"Name": "lab-rds-subnet-group",
+										},
+									},
+								},
+								"mode":                "managed",
+								"name":                "this",
+								"provider_config_key": "aws",
+								"schema_version":      0,
+								"type":                "aws_db_subnet_group",
+							},
+						],
+						"variables": {
+							"allocated_storage": {
+								"description": "Armazenamento alocado em GB",
+							},
+							"engine": {
+								"description": "Engine do banco (ex: postgres, mysql)",
+							},
+							"engine_version": {
+								"description": "Versão da engine",
+							},
+							"instance_class": {
+								"description": "Classe da instância RDS",
+							},
+							"password": {
+								"description": "Senha do usuário master",
+								"sensitive":   true,
+							},
+							"subnet_ids": {
+								"description": "Lista de subnets para o DB subnet group",
+							},
+							"username": {
+								"description": "Usuário master do banco",
+							},
+							"vpc_id": {
+								"description": "ID da VPC onde o RDS será criado",
+							},
+						},
+					},
+					"source": "./modules/rds",
+				},
+				"s3": {
+					"count_expression": {
+						"references": [
+							"var.enable_s3",
+						],
+					},
+					"expressions": {
+						"bucket_name_prefix": {
+							"constant_value": "lab-modular",
+						},
+					},
+					"module": {
+						"outputs": {
+							"bucket_name": {
+								"description": "Nome do bucket S3 criado",
+								"expression": {
+									"references": [
+										"aws_s3_bucket.this.bucket",
+										"aws_s3_bucket.this",
+									],
+								},
+							},
+						},
+						"resources": [
+							{
+								"address": "aws_s3_bucket.this",
+								"expressions": {
+									"bucket": {
+										"references": [
+											"local.bucket_name",
+										],
+									},
+									"tags": {
+										"constant_value": {
+											"Name": "lab-s3",
+										},
+									},
+								},
+								"mode":                "managed",
+								"name":                "this",
+								"provider_config_key": "aws",
+								"schema_version":      0,
+								"type":                "aws_s3_bucket",
+							},
+							{
+								"address": "aws_s3_bucket_versioning.this",
+								"expressions": {
+									"bucket": {
+										"references": [
+											"aws_s3_bucket.this.id",
+											"aws_s3_bucket.this",
+										],
+									},
+									"versioning_configuration": [
+										{
+											"status": {
+												"references": [
+													"var.versioning_enabled",
+												],
+											},
+										},
+									],
+								},
+								"mode":                "managed",
+								"name":                "this",
+								"provider_config_key": "aws",
+								"schema_version":      0,
+								"type":                "aws_s3_bucket_versioning",
+							},
+							{
+								"address": "random_id.suffix",
+								"expressions": {
+									"byte_length": {
+										"constant_value": 4,
+									},
+								},
+								"mode":                "managed",
+								"name":                "suffix",
+								"provider_config_key": "random",
+								"schema_version":      0,
+								"type":                "random_id",
+							},
+						],
+						"variables": {
+							"bucket_name_prefix": {
+								"description": "Prefixo para o nome do bucket S3",
+							},
+							"mfa_delete_enabled": {
+								"default": false,
+							},
+							"versioning_enabled": {
+								"default":     true,
+								"description": "Habilita versionamento no bucket",
+							},
+						},
+					},
+					"source": "./modules/s3",
+				},
+			},
+			"variables": {
+				"aws_region": {
+					"default":     "us-east-1",
+					"description": "Região AWS usada no laboratório",
+				},
+				"enable_ec2": {
+					"default":     false,
+					"description": "Habilita a criação de instâncias EC2",
+				},
+				"enable_network": {
+					"default":     true,
+					"description": "Habilita a criação de VPC e subnets",
+				},
+				"enable_rds": {
+					"default":     true,
+					"description": "Habilita a criação de instância RDS",
+				},
+				"enable_s3": {
+					"default":     false,
+					"description": "Habilita a criação de buckets S3",
+				},
+			},
+		},
+	},
+	"format_version": "1.2",
+	"planned_values": {
+		"root_module": {
+			"child_modules": [
+				{
+					"address": "module.network[0]",
+					"resources": [
+						{
+							"address":        "module.network[0].aws_subnet.db[\"10.0.2.0/24\"]",
+							"index":          "10.0.2.0/24",
+							"mode":           "managed",
+							"name":           "db",
+							"provider_name":  "registry.terraform.io/hashicorp/aws",
+							"schema_version": 1,
+							"sensitive_values": {
+								"tags":     {},
+								"tags_all": {},
+							},
+							"type": "aws_subnet",
+							"values": {
+								"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0fc699ddc69cd3d81",
+								"assign_ipv6_address_on_creation":                false,
+								"availability_zone":                              "us-east-1f",
+								"availability_zone_id":                           "use1-az5",
+								"cidr_block":                                     "10.0.2.0/24",
+								"customer_owned_ipv4_pool":                       "",
+								"enable_dns64":                                   false,
+								"enable_resource_name_dns_a_record_on_launch":    false,
+								"enable_resource_name_dns_aaaa_record_on_launch": false,
+								"id":                                  "subnet-0fc699ddc69cd3d81",
+								"ipv6_cidr_block":                     "",
+								"ipv6_cidr_block_association_id":      "",
+								"ipv6_native":                         false,
+								"map_customer_owned_ip_on_launch":     false,
+								"map_public_ip_on_launch":             false,
+								"outpost_arn":                         "",
+								"owner_id":                            "116981771514",
+								"private_dns_hostname_type_on_launch": "ip-name",
+								"tags": {
+									"Name": "lab-db-10.0.2.0/24",
+									"Type": "db",
+								},
+								"tags_all": {
+									"Name": "lab-db-10.0.2.0/24",
+									"Type": "db",
+								},
+								"timeouts": null,
+								"vpc_id":   "vpc-029ea6423a20c05fe",
+							},
+						},
+						{
+							"address":        "module.network[0].aws_subnet.public[\"10.0.1.0/24\"]",
+							"index":          "10.0.1.0/24",
+							"mode":           "managed",
+							"name":           "public",
+							"provider_name":  "registry.terraform.io/hashicorp/aws",
+							"schema_version": 1,
+							"sensitive_values": {
+								"tags":     {},
+								"tags_all": {},
+							},
+							"type": "aws_subnet",
+							"values": {
+								"assign_ipv6_address_on_creation":                false,
+								"cidr_block":                                     "10.0.1.0/24",
+								"customer_owned_ipv4_pool":                       null,
+								"enable_dns64":                                   false,
+								"enable_resource_name_dns_a_record_on_launch":    false,
+								"enable_resource_name_dns_aaaa_record_on_launch": false,
+								"ipv6_cidr_block":                                null,
+								"ipv6_native":                                    false,
+								"map_customer_owned_ip_on_launch":                null,
+								"map_public_ip_on_launch":                        true,
+								"outpost_arn":                                    null,
+								"tags": {
+									"Name": "lab-public-10.0.1.0/24",
+									"Type": "public",
+								},
+								"tags_all": {
+									"Name": "lab-public-10.0.1.0/24",
+									"Type": "public",
+								},
+								"timeouts": null,
+								"vpc_id":   "vpc-029ea6423a20c05fe",
+							},
+						},
+						{
+							"address":        "module.network[0].aws_vpc.this",
+							"mode":           "managed",
+							"name":           "this",
+							"provider_name":  "registry.terraform.io/hashicorp/aws",
+							"schema_version": 1,
+							"sensitive_values": {
+								"tags":     {},
+								"tags_all": {},
+							},
+							"type": "aws_vpc",
+							"values": {
+								"arn": "arn:aws:ec2:us-east-1:116981771514:vpc/vpc-029ea6423a20c05fe",
+								"assign_generated_ipv6_cidr_block":     false,
+								"cidr_block":                           "10.0.0.0/16",
+								"default_network_acl_id":               "acl-0f602fe713aecb51c",
+								"default_route_table_id":               "rtb-0f8e902fd85aa6d66",
+								"default_security_group_id":            "sg-0d5e31011d7a61d9c",
+								"dhcp_options_id":                      "dopt-0122e1f7e9c886142",
+								"enable_classiclink":                   false,
+								"enable_classiclink_dns_support":       false,
+								"enable_dns_hostnames":                 true,
+								"enable_dns_support":                   true,
+								"enable_network_address_usage_metrics": false,
+								"id":                                   "vpc-029ea6423a20c05fe",
+								"instance_tenancy":                     "default",
+								"ipv4_ipam_pool_id":                    null,
+								"ipv4_netmask_length":                  null,
+								"ipv6_association_id":                  "",
+								"ipv6_cidr_block":                      "",
+								"ipv6_cidr_block_network_border_group": "",
+								"ipv6_ipam_pool_id":                    "",
+								"ipv6_netmask_length":                  0,
+								"main_route_table_id":                  "rtb-0f8e902fd85aa6d66",
+								"owner_id":                             "116981771514",
+								"tags": {
+									"Name": "lab-vpc",
+								},
+								"tags_all": {
+									"Name": "lab-vpc",
+								},
+							},
+						},
+					],
+				},
+				{
+					"address": "module.rds[0]",
+					"resources": [
+						{
+							"address":        "module.rds[0].aws_db_instance.this",
+							"mode":           "managed",
+							"name":           "this",
+							"provider_name":  "registry.terraform.io/hashicorp/aws",
+							"schema_version": 1,
+							"sensitive_values": {
+								"blue_green_update":        [],
+								"password":                 true,
+								"replicas":                 [],
+								"restore_to_point_in_time": [],
+								"s3_import":                [],
+								"tags":                     {},
+								"tags_all":                 {},
+								"vpc_security_group_ids":   [],
+							},
+							"type": "aws_db_instance",
+							"values": {
+								"allocated_storage":               20,
+								"allow_major_version_upgrade":     null,
+								"apply_immediately":               false,
+								"auto_minor_version_upgrade":      true,
+								"blue_green_update":               [],
+								"copy_tags_to_snapshot":           false,
+								"custom_iam_instance_profile":     null,
+								"customer_owned_ip_enabled":       null,
+								"db_name":                         "labdb",
+								"db_subnet_group_name":            "lab-rds-subnet-group",
+								"delete_automated_backups":        true,
+								"deletion_protection":             null,
+								"domain":                          null,
+								"domain_iam_role_name":            null,
+								"enabled_cloudwatch_logs_exports": null,
+								"engine":                              "postgres",
+								"engine_version":                      "14.11",
+								"final_snapshot_identifier":           null,
+								"iam_database_authentication_enabled": null,
+								"instance_class":                      "db.t3.micro",
+								"max_allocated_storage":               null,
+								"monitoring_interval":                 0,
+								"password":                            "REDACTED_SENSITIVE",
+								"performance_insights_enabled":        false,
+								"publicly_accessible":                 false,
+								"replicate_source_db":                 null,
+								"restore_to_point_in_time":            [],
+								"s3_import":                           [],
+								"security_group_names":                null,
+								"skip_final_snapshot":                 true,
+								"storage_encrypted":                   true,
+								"tags": {
+									"Name": "lab-rds",
+								},
+								"tags_all": {
+									"Name": "lab-rds",
+								},
+								"timeouts": null,
+								"username": "adminuser",
+							},
+						},
+						{
+							"address":        "module.rds[0].aws_db_subnet_group.this",
+							"mode":           "managed",
+							"name":           "this",
+							"provider_name":  "registry.terraform.io/hashicorp/aws",
+							"schema_version": 0,
+							"sensitive_values": {
+								"subnet_ids": [
+									false,
+								],
+								"supported_network_types": [],
+								"tags":     {},
+								"tags_all": {},
+							},
+							"type": "aws_db_subnet_group",
+							"values": {
+								"description": "Managed by Terraform",
+								"name":        "lab-rds-subnet-group",
+								"subnet_ids": [
+									"subnet-0fc699ddc69cd3d81",
+								],
+								"tags": {
+									"Name": "lab-rds-subnet-group",
+								},
+								"tags_all": {
+									"Name": "lab-rds-subnet-group",
+								},
+							},
+						},
+					],
+				},
+			],
+		},
+	},
+	"prior_state": {
+		"format_version":    "1.0",
+		"terraform_version": "1.13.3",
+		"values": {
+			"root_module": {
+				"child_modules": [
+					{
+						"address": "module.network[0]",
+						"resources": [
+							{
+								"address": "module.network[0].aws_subnet.db[\"10.0.2.0/24\"]",
+								"depends_on": [
+									"module.network.aws_vpc.this",
+								],
+								"index":          "10.0.2.0/24",
+								"mode":           "managed",
+								"name":           "db",
+								"provider_name":  "registry.terraform.io/hashicorp/aws",
+								"schema_version": 1,
+								"sensitive_values": {
+									"tags":     {},
+									"tags_all": {},
+								},
+								"type": "aws_subnet",
+								"values": {
+									"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0fc699ddc69cd3d81",
+									"assign_ipv6_address_on_creation":                false,
+									"availability_zone":                              "us-east-1f",
+									"availability_zone_id":                           "use1-az5",
+									"cidr_block":                                     "10.0.2.0/24",
+									"customer_owned_ipv4_pool":                       "",
+									"enable_dns64":                                   false,
+									"enable_resource_name_dns_a_record_on_launch":    false,
+									"enable_resource_name_dns_aaaa_record_on_launch": false,
+									"id":                                  "subnet-0fc699ddc69cd3d81",
+									"ipv6_cidr_block":                     "",
+									"ipv6_cidr_block_association_id":      "",
+									"ipv6_native":                         false,
+									"map_customer_owned_ip_on_launch":     false,
+									"map_public_ip_on_launch":             false,
+									"outpost_arn":                         "",
+									"owner_id":                            "116981771514",
+									"private_dns_hostname_type_on_launch": "ip-name",
+									"tags": {
+										"Name": "lab-db-10.0.2.0/24",
+										"Type": "db",
+									},
+									"tags_all": {
+										"Name": "lab-db-10.0.2.0/24",
+										"Type": "db",
+									},
+									"timeouts": null,
+									"vpc_id":   "vpc-029ea6423a20c05fe",
+								},
+							},
+							{
+								"address": "module.network[0].aws_subnet.public[\"10.0.1.0/24\"]",
+								"depends_on": [
+									"module.network.aws_vpc.this",
+								],
+								"index":          "10.0.1.0/24",
+								"mode":           "managed",
+								"name":           "public",
+								"provider_name":  "registry.terraform.io/hashicorp/aws",
+								"schema_version": 1,
+								"sensitive_values": {
+									"tags":     {},
+									"tags_all": {},
+								},
+								"tainted": true,
+								"type":    "aws_subnet",
+								"values": {
+									"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0bd4936653beb067f",
+									"assign_ipv6_address_on_creation":                false,
+									"availability_zone":                              "us-east-1c",
+									"availability_zone_id":                           "use1-az1",
+									"cidr_block":                                     "10.0.1.0/24",
+									"customer_owned_ipv4_pool":                       "",
+									"enable_dns64":                                   false,
+									"enable_resource_name_dns_a_record_on_launch":    false,
+									"enable_resource_name_dns_aaaa_record_on_launch": false,
+									"id":                                  "subnet-0bd4936653beb067f",
+									"ipv6_cidr_block":                     "",
+									"ipv6_cidr_block_association_id":      "",
+									"ipv6_native":                         false,
+									"map_customer_owned_ip_on_launch":     false,
+									"map_public_ip_on_launch":             true,
+									"outpost_arn":                         "",
+									"owner_id":                            "116981771514",
+									"private_dns_hostname_type_on_launch": "ip-name",
+									"tags": {
+										"Name": "lab-public-10.0.1.0/24",
+										"Type": "public",
+									},
+									"tags_all": {
+										"Name": "lab-public-10.0.1.0/24",
+										"Type": "public",
+									},
+									"timeouts": null,
+									"vpc_id":   "vpc-029ea6423a20c05fe",
+								},
+							},
+							{
+								"address":        "module.network[0].aws_vpc.this",
+								"mode":           "managed",
+								"name":           "this",
+								"provider_name":  "registry.terraform.io/hashicorp/aws",
+								"schema_version": 1,
+								"sensitive_values": {
+									"tags":     {},
+									"tags_all": {},
+								},
+								"type": "aws_vpc",
+								"values": {
+									"arn": "arn:aws:ec2:us-east-1:116981771514:vpc/vpc-029ea6423a20c05fe",
+									"assign_generated_ipv6_cidr_block":     false,
+									"cidr_block":                           "10.0.0.0/16",
+									"default_network_acl_id":               "acl-0f602fe713aecb51c",
+									"default_route_table_id":               "rtb-0f8e902fd85aa6d66",
+									"default_security_group_id":            "sg-0d5e31011d7a61d9c",
+									"dhcp_options_id":                      "dopt-0122e1f7e9c886142",
+									"enable_classiclink":                   false,
+									"enable_classiclink_dns_support":       false,
+									"enable_dns_hostnames":                 true,
+									"enable_dns_support":                   true,
+									"enable_network_address_usage_metrics": false,
+									"id":                                   "vpc-029ea6423a20c05fe",
+									"instance_tenancy":                     "default",
+									"ipv4_ipam_pool_id":                    null,
+									"ipv4_netmask_length":                  null,
+									"ipv6_association_id":                  "",
+									"ipv6_cidr_block":                      "",
+									"ipv6_cidr_block_network_border_group": "",
+									"ipv6_ipam_pool_id":                    "",
+									"ipv6_netmask_length":                  0,
+									"main_route_table_id":                  "rtb-0f8e902fd85aa6d66",
+									"owner_id":                             "116981771514",
+									"tags": {
+										"Name": "lab-vpc",
+									},
+									"tags_all": {
+										"Name": "lab-vpc",
+									},
+								},
+							},
+						],
+					},
+				],
+			},
+		},
+	},
+	"relevant_attributes": [
+		{
+			"attribute": [],
+			"resource":  "module.network[0].aws_subnet.db",
+		},
+		{
+			"attribute": [],
+			"resource":  "module.network.aws_subnet.public",
+		},
+		{
+			"attribute": [
+				"id",
+			],
+			"resource": "module.network[0].aws_vpc.this",
+		},
+		{
+			"attribute": [
+				"id",
+			],
+			"resource": "module.network.aws_vpc.this",
+		},
+		{
+			"attribute": [],
+			"resource":  "module.network[0].aws_subnet.public",
+		},
+		{
+			"attribute": [
+				"name",
+			],
+			"resource": "module.rds[0].aws_db_subnet_group.this",
+		},
+		{
+			"attribute": [
+				"address",
+			],
+			"resource": "module.rds[0].aws_db_instance.this",
+		},
+		{
+			"attribute": [],
+			"resource":  "module.network.aws_subnet.db",
+		},
+		{
+			"attribute": [
+				"port",
+			],
+			"resource": "module.rds[0].aws_db_instance.this",
+		},
+	],
+	"resource_changes": [
+		{
+			"address": "module.network[0].aws_subnet.db[\"10.0.2.0/24\"]",
+			"change": {
+				"actions": [
+					"no-op",
+				],
+				"after": {
+					"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0fc699ddc69cd3d81",
+					"assign_ipv6_address_on_creation":                false,
+					"availability_zone":                              "us-east-1f",
+					"availability_zone_id":                           "use1-az5",
+					"cidr_block":                                     "10.0.2.0/24",
+					"customer_owned_ipv4_pool":                       "",
+					"enable_dns64":                                   false,
+					"enable_resource_name_dns_a_record_on_launch":    false,
+					"enable_resource_name_dns_aaaa_record_on_launch": false,
+					"id":                                  "subnet-0fc699ddc69cd3d81",
+					"ipv6_cidr_block":                     "",
+					"ipv6_cidr_block_association_id":      "",
+					"ipv6_native":                         false,
+					"map_customer_owned_ip_on_launch":     false,
+					"map_public_ip_on_launch":             false,
+					"outpost_arn":                         "",
+					"owner_id":                            "116981771514",
+					"private_dns_hostname_type_on_launch": "ip-name",
+					"tags": {
+						"Name": "lab-db-10.0.2.0/24",
+						"Type": "db",
+					},
+					"tags_all": {
+						"Name": "lab-db-10.0.2.0/24",
+						"Type": "db",
+					},
+					"timeouts": null,
+					"vpc_id":   "vpc-029ea6423a20c05fe",
+				},
+				"after_sensitive": {
+					"tags":     {},
+					"tags_all": {},
+				},
+				"after_unknown": {},
+				"before": {
+					"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0fc699ddc69cd3d81",
+					"assign_ipv6_address_on_creation":                false,
+					"availability_zone":                              "us-east-1f",
+					"availability_zone_id":                           "use1-az5",
+					"cidr_block":                                     "10.0.2.0/24",
+					"customer_owned_ipv4_pool":                       "",
+					"enable_dns64":                                   false,
+					"enable_resource_name_dns_a_record_on_launch":    false,
+					"enable_resource_name_dns_aaaa_record_on_launch": false,
+					"id":                                  "subnet-0fc699ddc69cd3d81",
+					"ipv6_cidr_block":                     "",
+					"ipv6_cidr_block_association_id":      "",
+					"ipv6_native":                         false,
+					"map_customer_owned_ip_on_launch":     false,
+					"map_public_ip_on_launch":             false,
+					"outpost_arn":                         "",
+					"owner_id":                            "116981771514",
+					"private_dns_hostname_type_on_launch": "ip-name",
+					"tags": {
+						"Name": "lab-db-10.0.2.0/24",
+						"Type": "db",
+					},
+					"tags_all": {
+						"Name": "lab-db-10.0.2.0/24",
+						"Type": "db",
+					},
+					"timeouts": null,
+					"vpc_id":   "vpc-029ea6423a20c05fe",
+				},
+				"before_sensitive": {
+					"tags":     {},
+					"tags_all": {},
+				},
+			},
+			"index":          "10.0.2.0/24",
+			"mode":           "managed",
+			"module_address": "module.network[0]",
+			"name":           "db",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_subnet",
+		},
+		{
+			"address": "module.network[0].aws_subnet.public[\"10.0.1.0/24\"]",
+			"change": {
+				"actions": [
+					"delete",
+					"create",
+				],
+				"after": {
+					"assign_ipv6_address_on_creation":                false,
+					"cidr_block":                                     "10.0.1.0/24",
+					"customer_owned_ipv4_pool":                       null,
+					"enable_dns64":                                   false,
+					"enable_resource_name_dns_a_record_on_launch":    false,
+					"enable_resource_name_dns_aaaa_record_on_launch": false,
+					"ipv6_cidr_block":                                null,
+					"ipv6_native":                                    false,
+					"map_customer_owned_ip_on_launch":                null,
+					"map_public_ip_on_launch":                        true,
+					"outpost_arn":                                    null,
+					"tags": {
+						"Name": "lab-public-10.0.1.0/24",
+						"Type": "public",
+					},
+					"tags_all": {
+						"Name": "lab-public-10.0.1.0/24",
+						"Type": "public",
+					},
+					"timeouts": null,
+					"vpc_id":   "vpc-029ea6423a20c05fe",
+				},
+				"after_sensitive": {
+					"tags":     {},
+					"tags_all": {},
+				},
+				"after_unknown": {
+					"arn":                  true,
+					"availability_zone":    true,
+					"availability_zone_id": true,
+					"id": true,
+					"ipv6_cidr_block_association_id":      true,
+					"owner_id":                            true,
+					"private_dns_hostname_type_on_launch": true,
+					"tags":     {},
+					"tags_all": {},
+				},
+				"before": {
+					"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0bd4936653beb067f",
+					"assign_ipv6_address_on_creation":                false,
+					"availability_zone":                              "us-east-1c",
+					"availability_zone_id":                           "use1-az1",
+					"cidr_block":                                     "10.0.1.0/24",
+					"customer_owned_ipv4_pool":                       "",
+					"enable_dns64":                                   false,
+					"enable_resource_name_dns_a_record_on_launch":    false,
+					"enable_resource_name_dns_aaaa_record_on_launch": false,
+					"id":                                  "subnet-0bd4936653beb067f",
+					"ipv6_cidr_block":                     "",
+					"ipv6_cidr_block_association_id":      "",
+					"ipv6_native":                         false,
+					"map_customer_owned_ip_on_launch":     false,
+					"map_public_ip_on_launch":             true,
+					"outpost_arn":                         "",
+					"owner_id":                            "116981771514",
+					"private_dns_hostname_type_on_launch": "ip-name",
+					"tags": {
+						"Name": "lab-public-10.0.1.0/24",
+						"Type": "public",
+					},
+					"tags_all": {
+						"Name": "lab-public-10.0.1.0/24",
+						"Type": "public",
+					},
+					"timeouts": null,
+					"vpc_id":   "vpc-029ea6423a20c05fe",
+				},
+				"before_sensitive": {
+					"tags":     {},
+					"tags_all": {},
+				},
+			},
+			"index":          "10.0.1.0/24",
+			"mode":           "managed",
+			"module_address": "module.network[0]",
+			"name":           "public",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_subnet",
+		},
+		{
+			"address": "module.network[0].aws_vpc.this",
+			"change": {
+				"actions": [
+					"no-op",
+				],
+				"after": {
+					"arn": "arn:aws:ec2:us-east-1:116981771514:vpc/vpc-029ea6423a20c05fe",
+					"assign_generated_ipv6_cidr_block":     false,
+					"cidr_block":                           "10.0.0.0/16",
+					"default_network_acl_id":               "acl-0f602fe713aecb51c",
+					"default_route_table_id":               "rtb-0f8e902fd85aa6d66",
+					"default_security_group_id":            "sg-0d5e31011d7a61d9c",
+					"dhcp_options_id":                      "dopt-0122e1f7e9c886142",
+					"enable_classiclink":                   false,
+					"enable_classiclink_dns_support":       false,
+					"enable_dns_hostnames":                 true,
+					"enable_dns_support":                   true,
+					"enable_network_address_usage_metrics": false,
+					"id":                                   "vpc-029ea6423a20c05fe",
+					"instance_tenancy":                     "default",
+					"ipv4_ipam_pool_id":                    null,
+					"ipv4_netmask_length":                  null,
+					"ipv6_association_id":                  "",
+					"ipv6_cidr_block":                      "",
+					"ipv6_cidr_block_network_border_group": "",
+					"ipv6_ipam_pool_id":                    "",
+					"ipv6_netmask_length":                  0,
+					"main_route_table_id":                  "rtb-0f8e902fd85aa6d66",
+					"owner_id":                             "116981771514",
+					"tags": {
+						"Name": "lab-vpc",
+					},
+					"tags_all": {
+						"Name": "lab-vpc",
+					},
+				},
+				"after_sensitive": {
+					"tags":     {},
+					"tags_all": {},
+				},
+				"after_unknown": {},
+				"before": {
+					"arn": "arn:aws:ec2:us-east-1:116981771514:vpc/vpc-029ea6423a20c05fe",
+					"assign_generated_ipv6_cidr_block":     false,
+					"cidr_block":                           "10.0.0.0/16",
+					"default_network_acl_id":               "acl-0f602fe713aecb51c",
+					"default_route_table_id":               "rtb-0f8e902fd85aa6d66",
+					"default_security_group_id":            "sg-0d5e31011d7a61d9c",
+					"dhcp_options_id":                      "dopt-0122e1f7e9c886142",
+					"enable_classiclink":                   false,
+					"enable_classiclink_dns_support":       false,
+					"enable_dns_hostnames":                 true,
+					"enable_dns_support":                   true,
+					"enable_network_address_usage_metrics": false,
+					"id":                                   "vpc-029ea6423a20c05fe",
+					"instance_tenancy":                     "default",
+					"ipv4_ipam_pool_id":                    null,
+					"ipv4_netmask_length":                  null,
+					"ipv6_association_id":                  "",
+					"ipv6_cidr_block":                      "",
+					"ipv6_cidr_block_network_border_group": "",
+					"ipv6_ipam_pool_id":                    "",
+					"ipv6_netmask_length":                  0,
+					"main_route_table_id":                  "rtb-0f8e902fd85aa6d66",
+					"owner_id":                             "116981771514",
+					"tags": {
+						"Name": "lab-vpc",
+					},
+					"tags_all": {
+						"Name": "lab-vpc",
+					},
+				},
+				"before_sensitive": {
+					"tags":     {},
+					"tags_all": {},
+				},
+			},
+			"mode":           "managed",
+			"module_address": "module.network[0]",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_vpc",
+		},
+		{
+			"address": "module.rds[0].aws_db_instance.this",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"allocated_storage":               20,
+					"allow_major_version_upgrade":     null,
+					"apply_immediately":               false,
+					"auto_minor_version_upgrade":      true,
+					"blue_green_update":               [],
+					"copy_tags_to_snapshot":           false,
+					"custom_iam_instance_profile":     null,
+					"customer_owned_ip_enabled":       null,
+					"db_name":                         "labdb",
+					"db_subnet_group_name":            "lab-rds-subnet-group",
+					"delete_automated_backups":        true,
+					"deletion_protection":             null,
+					"domain":                          null,
+					"domain_iam_role_name":            null,
+					"enabled_cloudwatch_logs_exports": null,
+					"engine":                              "postgres",
+					"engine_version":                      "14.11",
+					"final_snapshot_identifier":           null,
+					"iam_database_authentication_enabled": null,
+					"instance_class":                      "db.t3.micro",
+					"max_allocated_storage":               null,
+					"monitoring_interval":                 0,
+					"password":                            "REDACTED_SENSITIVE",
+					"performance_insights_enabled":        false,
+					"publicly_accessible":                 false,
+					"replicate_source_db":                 null,
+					"restore_to_point_in_time":            [],
+					"s3_import":                           [],
+					"security_group_names":                null,
+					"skip_final_snapshot":                 true,
+					"storage_encrypted":                   true,
+					"tags": {
+						"Name": "lab-rds",
+					},
+					"tags_all": {
+						"Name": "lab-rds",
+					},
+					"timeouts": null,
+					"username": "adminuser",
+				},
+				"after_sensitive": {
+					"blue_green_update":        [],
+					"password":                 true,
+					"replicas":                 [],
+					"restore_to_point_in_time": [],
+					"s3_import":                [],
+					"tags":                     {},
+					"tags_all":                 {},
+					"vpc_security_group_ids":   [],
+				},
+				"after_unknown": {
+					"address":                 true,
+					"arn":                     true,
+					"availability_zone":       true,
+					"backup_retention_period": true,
+					"backup_window":           true,
+					"blue_green_update":       [],
+					"ca_cert_identifier":      true,
+					"character_set_name":      true,
+					"endpoint":                true,
+					"engine_version_actual":   true,
+					"hosted_zone_id":          true,
+					"id":                      true,
+					"identifier":              true,
+					"identifier_prefix":       true,
+					"iops":                    true,
+					"kms_key_id":              true,
+					"latest_restorable_time":  true,
+					"license_model":           true,
+					"maintenance_window":      true,
+					"monitoring_role_arn":     true,
+					"multi_az":                true,
+					"name":                    true,
+					"nchar_character_set_name":              true,
+					"network_type":                          true,
+					"option_group_name":                     true,
+					"parameter_group_name":                  true,
+					"performance_insights_kms_key_id":       true,
+					"performance_insights_retention_period": true,
+					"port":                     true,
+					"replica_mode":             true,
+					"replicas":                 true,
+					"resource_id":              true,
+					"restore_to_point_in_time": [],
+					"s3_import":                [],
+					"snapshot_identifier":      true,
+					"status":                   true,
+					"storage_throughput":       true,
+					"storage_type":             true,
+					"tags":                     {},
+					"tags_all":                 {},
+					"timezone":                 true,
+					"vpc_security_group_ids":   true,
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":           "managed",
+			"module_address": "module.rds[0]",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_db_instance",
+		},
+		{
+			"address": "module.rds[0].aws_db_subnet_group.this",
+			"change": {
+				"actions": [
+					"create",
+				],
+				"after": {
+					"description": "Managed by Terraform",
+					"name":        "lab-rds-subnet-group",
+					"subnet_ids": [
+						"subnet-0fc699ddc69cd3d81",
+					],
+					"tags": {
+						"Name": "lab-rds-subnet-group",
+					},
+					"tags_all": {
+						"Name": "lab-rds-subnet-group",
+					},
+				},
+				"after_sensitive": {
+					"subnet_ids": [
+						false,
+					],
+					"supported_network_types": [],
+					"tags":     {},
+					"tags_all": {},
+				},
+				"after_unknown": {
+					"arn":         true,
+					"id":          true,
+					"name_prefix": true,
+					"subnet_ids": [
+						false,
+					],
+					"supported_network_types": true,
+					"tags":     {},
+					"tags_all": {},
+				},
+				"before":           null,
+				"before_sensitive": false,
+			},
+			"mode":           "managed",
+			"module_address": "module.rds[0]",
+			"name":           "this",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_db_subnet_group",
+		},
+	],
+	"resource_drift": [
+		{
+			"address": "module.network[0].aws_subnet.public[\"10.0.1.0/24\"]",
+			"change": {
+				"actions": [
+					"update",
+				],
+				"after": {
+					"arn": "arn:aws:ec2:us-east-1:116981771514:subnet/subnet-0bd4936653beb067f",
+					"assign_ipv6_address_on_creation":                false,
+					"availability_zone":                              "us-east-1c",
+					"availability_zone_id":                           "use1-az1",
+					"cidr_block":                                     "10.0.1.0/24",
+					"customer_owned_ipv4_pool":                       "",
+					"enable_dns64":                                   false,
+					"enable_resource_name_dns_a_record_on_launch":    false,
+					"enable_resource_name_dns_aaaa_record_on_launch": false,
+					"id":                                  "subnet-0bd4936653beb067f",
+					"ipv6_cidr_block":                     "",
+					"ipv6_cidr_block_association_id":      "",
+					"ipv6_native":                         false,
+					"map_customer_owned_ip_on_launch":     false,
+					"map_public_ip_on_launch":             true,
+					"outpost_arn":                         "",
+					"owner_id":                            "116981771514",
+					"private_dns_hostname_type_on_launch": "ip-name",
+					"tags": {
+						"Name": "lab-public-10.0.1.0/24",
+						"Type": "public",
+					},
+					"tags_all": {
+						"Name": "lab-public-10.0.1.0/24",
+						"Type": "public",
+					},
+					"timeouts": null,
+					"vpc_id":   "vpc-029ea6423a20c05fe",
+				},
+				"after_sensitive": {
+					"tags":     {},
+					"tags_all": {},
+				},
+				"after_unknown": {},
+				"before": {
+					"arn": null,
+					"assign_ipv6_address_on_creation":                false,
+					"availability_zone":                              null,
+					"availability_zone_id":                           null,
+					"cidr_block":                                     "10.0.1.0/24",
+					"customer_owned_ipv4_pool":                       null,
+					"enable_dns64":                                   false,
+					"enable_resource_name_dns_a_record_on_launch":    false,
+					"enable_resource_name_dns_aaaa_record_on_launch": false,
+					"id":                                  "subnet-0bd4936653beb067f",
+					"ipv6_cidr_block":                     null,
+					"ipv6_cidr_block_association_id":      null,
+					"ipv6_native":                         false,
+					"map_customer_owned_ip_on_launch":     null,
+					"map_public_ip_on_launch":             true,
+					"outpost_arn":                         null,
+					"owner_id":                            null,
+					"private_dns_hostname_type_on_launch": null,
+					"tags": {
+						"Name": "lab-public-10.0.1.0/24",
+						"Type": "public",
+					},
+					"tags_all": {
+						"Name": "lab-public-10.0.1.0/24",
+						"Type": "public",
+					},
+					"timeouts": null,
+					"vpc_id":   "vpc-029ea6423a20c05fe",
+				},
+				"before_sensitive": {
+					"tags":     {},
+					"tags_all": {},
+				},
+			},
+			"index":          "10.0.1.0/24",
+			"mode":           "managed",
+			"module_address": "module.network[0]",
+			"name":           "public",
+			"provider_name":  "registry.terraform.io/hashicorp/aws",
+			"type":           "aws_subnet",
+		},
+	],
+	"terraform_version": "1.13.3",
+	"timestamp":         "2026-02-17T18:28:17Z",
+	"variables": {
+		"aws_region": {
+			"value": "us-east-1",
+		},
+		"enable_ec2": {
+			"value": false,
+		},
+		"enable_network": {
+			"value": true,
+		},
+		"enable_rds": {
+			"value": true,
+		},
+		"enable_s3": {
+			"value": false,
+		},
+	},
+}
