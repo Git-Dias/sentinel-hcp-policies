@@ -20,17 +20,6 @@ violations = collection.reject(resources, func(res) {
 	return encrypted_key is true
 })
 
-summary = {
-	"policy_name": const.policy_name,
-	"violations": map violations as _, v {
-		{
-			"address":        v.address,
-			"module_address": v.module_address,
-			"message":        const.message,
-		}
-	},
-}
-
 # Regra Principal
 main = rule {
 	violations is empty
