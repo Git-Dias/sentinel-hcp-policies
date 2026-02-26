@@ -30,5 +30,5 @@ if not main {
 	print("X EC2 - VIOLAÇÃO DETECTADA")
 	print("   Todos os volumes EBS devem ter a criptografia em repouso habilitada")
 	print("   Consulte o baseline de Segurança para mais informações")
-	print("")
+	print("   const.message")
 }
