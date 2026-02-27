@@ -14,8 +14,8 @@ import "module" "tfconfig-functions" {
   source = "../../../../imports/modules/tfconfig-functions.sentinel"
 }
 
-policy "ec2-ebs-encryption-enabled" {
-    source = "../../../../policies/aws/security/cloud-sec/ec2/ec2-ebs-encryption-enabled.sentinel"
+policy "s3-require-ssl" {
+    source = "../../../../policies/aws/security/cloud-sec/s3/s3-require-ssl.sentinel"
     enforcement_level = "hard-mandatory"
 }
 
