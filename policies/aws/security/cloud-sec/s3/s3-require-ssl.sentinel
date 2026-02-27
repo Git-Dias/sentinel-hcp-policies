@@ -1,13 +1,7 @@
-# This policy mandates all requests to 'aws_s3_bucket' resources to use SSL using 'aws_s3_bucket_policy' resource.
-
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: BUSL-1.1
-
 # Imports
 
 import "tfconfig/v2" as tfconfig
 import "tfresources" as tf
-import "report" as report
 import "strings"
 import "collection" as collection
 import "collection/maps" as maps
@@ -148,10 +142,6 @@ summary = {
 	"policy_name": const.policy_name,
 	"violations":  policy_document_violations_list + inline_policy_violations_list,
 }
-
-# Outputs
-
-print(report.generate_policy_report(summary))
 
 # Rules
 
