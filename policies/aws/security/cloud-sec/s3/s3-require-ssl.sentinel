@@ -6,7 +6,6 @@
 # Imports
 
 import "tfconfig/v2" as tfconfig
-import "tfstate/v2" as tfstate
 import "tfresources" as tf
 import "report" as report
 import "strings"
@@ -46,21 +45,38 @@ resource_address_without_module_address = func(res) {
 
 get_referenced_policy_statements = func(res) {
 	policy = res.config.policy
-	if policy[const.references] is not defined or policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$" {
+
+	if policy[const.references] is not defined or
+	   policy[const.references][1] not matches "^data.aws_iam_policy_document.(.*)$" {
 		return []
 	}
+
 	reference = policy[const.references][1]
 
+	# Remove prefix "data."
 	address = strings.trim_prefix(reference, "data.")
-	// Append the module address to the data source's local address
-	// in case of nested modules
+
+	# Add module prefix if needed
 	if strings.has_prefix(res.module_address, const.module_prefix) {
 		address = res.module_address + "." + address
 	}
 
-	datasource = tf.state(tfstate.resources).mode("data").address(address).resources
-	return filter datasource[0].values.statement as _, statement {
-		statement.actions contains "*" or any statement.actions as _, action {
+	# Search in tfconfig instead of tfstate
+	datasources = tf.config(tfconfig.resources).
+		type("aws_iam_policy_document").
+		resources
+
+	matching = filter datasources as _, ds {
+		ds.address is address
+	}
+
+	if length(matching) is 0 {
+		return []
+	}
+
+	return filter matching[0].config.statement as _, statement {
+		statement.actions contains "*" or
+		any statement.actions as _, action {
 			strings.has_prefix(action, "s3:")
 		}
 	}
