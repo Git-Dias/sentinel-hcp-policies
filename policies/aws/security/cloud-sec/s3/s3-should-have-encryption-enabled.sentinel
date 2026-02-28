@@ -2,52 +2,67 @@
 
 import "tfplan/v2" as tfplan
 
+###############################################################################
+# Constantes
+###############################################################################
+
 allowed_algorithms = ["AES256", "aws:kms"]
 
-#
-# Busca todos os buckets planejados
-#
-s3_buckets = tfplan.find_resources("aws_s3_bucket")
+###############################################################################
+# Fontes de dados
+###############################################################################
 
-#
-# Busca todas as configurações de encryption
-#
+s3_buckets     = tfplan.find_resources("aws_s3_bucket")
 s3_encryptions = tfplan.find_resources("aws_s3_bucket_server_side_encryption_configuration")
 
-#
-# Bucket sem encryption
-#
-buckets_without_encryption = filter s3_buckets as _, bucket {
-  length(filter s3_encryptions as _, enc {
+###############################################################################
+# Helper: valida se um bucket possui encryption configurada corretamente
+###############################################################################
+
+has_valid_encryption = func(bucket) {
+  bucket_name = bucket.applied.bucket else "<unknown>"
+
+  # Filtra configurações de encryption que referenciam este bucket
+  matching = filter s3_encryptions as _, enc {
     enc.applied.bucket is bucket.applied.bucket
-  }) is 0
+  }
+
+  if length(matching) is 0 {
+    print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' não possui aws_s3_bucket_server_side_encryption_configuration associada.")
+    return false
+  }
+
+  enc     = values(matching)[0]
+  rules   = enc.applied.rule else []
+
+  if length(rules) is 0 {
+    print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' possui encryption configuration sem bloco 'rule' definido.")
+    return false
+  }
+
+  defaults = rules[0].apply_server_side_encryption_by_default else []
+
+  if length(defaults) is 0 {
+    print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' não possui 'apply_server_side_encryption_by_default' configurado.")
+    return false
+  }
+
+  algo = defaults[0].sse_algorithm else ""
+
+  if algo not in allowed_algorithms {
+    print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' utiliza algoritmo inválido: '" + algo + "'. Permitidos: " + allowed_algorithms)
+    return false
+  }
+
+  return true
 }
 
-#
-# Encryption inválida
-#
-invalid_encryption = filter s3_encryptions as _, enc {
-  enc.applied.rule is not defined or
-  length(enc.applied.rule) is 0 or
-  enc.applied.rule[0].apply_server_side_encryption_by_default is not defined or
-  length(enc.applied.rule[0].apply_server_side_encryption_by_default) is 0 or
-  enc.applied.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "AES256" and
-  enc.applied.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "aws:kms"
-}
-
-#
+###############################################################################
 # Regra principal
-#
-main = rule {
-  length(buckets_without_encryption) is 0 and
-  length(invalid_encryption) is 0
-}
+###############################################################################
 
-#
-# Output
-#
-if not main {
-  print("X S3 - VIOLAÇÃO DETECTADA")
-  print("Todos os buckets devem possuir encryption configurada.")
-  print("Algoritmos permitidos: AES256 ou aws:kms.")
+main = rule {
+  all s3_buckets as _, bucket {
+    has_valid_encryption(bucket)
+  }
 }
