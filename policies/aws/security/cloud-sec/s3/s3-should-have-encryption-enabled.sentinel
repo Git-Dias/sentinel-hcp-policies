@@ -1,31 +1,30 @@
 # S3 buckets should have encryption enabled
 
-# Imports
 import "tfplan/v2" as tfplan
 
-# Get all S3 bucket acls
-allS3BucketsServerSideEnc = tfplan.find_resources("aws_s3_bucket_server_side_encryption_configuration")
+# Get all S3 encryption configuration resources being created or updated
+s3_encryption = filter tfplan.resource_changes as _, rc {
+  rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
+  (rc.change.actions contains "create" or rc.change.actions contains "update")
+}
 
-# Filter to S3 buckets that are not encrypted by KMS
-# Warnings will be printed for all violations since the last parameter is true
+# Buckets that do NOT use KMS
+non_kms = filter s3_encryption as _, r {
+  r.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "aws:kms"
+}
 
-nonKMSEncryptedS3Buckets = tfplan.filter_attribute_is_not_value(allS3BucketsServerSideEnc,
-	"rule.0.apply_server_side_encryption_by_default.0.sse_algorithm",
-	"aws:kms", false)
+# Buckets that do NOT use AES256
+non_aes = filter s3_encryption as _, r {
+  r.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "AES256"
+}
 
-nonAESEncryptedS3Buckets = tfplan.filter_attribute_is_not_value(allS3BucketsServerSideEnc,
-	"rule.0.apply_server_side_encryption_by_default.0.sse_algorithm",
-	"AES256", false)
+validated = length(non_kms) is 0 or length(non_aes) is 0
 
-# Main rule
-validated = length(nonKMSEncryptedS3Buckets["messages"]) is 0 or length(nonAESEncryptedS3Buckets["messages"]) is 0
 main = rule {
-	validated is true
+  validated
 }
 
 if not main {
-	print("X S3 - VIOLAÇÃO DETECTADA")
-	print("   Buckets S3 devem ter criptografia habilitada")
-	print("   Consulte o baseline de Segurança para mais informações")
-	print(" ")
+  print("X S3 - VIOLAÇÃO DETECTADA")
+  print("Buckets S3 devem ter criptografia habilitada")
 }
