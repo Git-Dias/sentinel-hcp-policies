@@ -7,7 +7,6 @@
 
 import "tfconfig/v2" as tfconfig
 import "tfresources" as tf
-import "report" as report
 import "collection" as collection
 import "collection/maps" as maps
 import "strings"
@@ -97,8 +96,14 @@ summary = {
 	},
 }
 
-print(report.generate_policy_report(summary))
-
 main = rule {
 	violations is empty
+}
+
+# Print detalhado dos resultados
+if not main {
+	print("X S3 - VIOLAÇÃO DETECTADA")
+	print("   S3 Buckets devem ter criptografia habilitada no servidor")
+	print("   Consulte o baseline de Segurança para mais informações")
+	print(" ")
 }
