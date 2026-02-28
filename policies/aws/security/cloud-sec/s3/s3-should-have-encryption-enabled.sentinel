@@ -1,39 +1,74 @@
-# S3 buckets must have encryption enabled with AES256 or aws:kms
+# S3 buckets must have server-side encryption enabled
 
 import "tfplan/v2" as tfplan
 
-# Buckets sendo criados ou atualizados
-s3_buckets = filter tfplan.resource_changes as _, rc {
-  rc.type is "aws_s3_bucket" and
-  (rc.change.actions contains "create" or rc.change.actions contains "update")
+allowed_algorithms = ["AES256", "aws:kms"]
+
+# Helpers
+# Retorna buckets criados ou alterados
+get_buckets = func() {
+  return filter tfplan.resource_changes as _, rc {
+    rc.type is "aws_s3_bucket" and
+    (rc.change.actions contains "create" or rc.change.actions contains "update")
+  }
 }
 
-# Encryption configs sendo criadas ou atualizadas
-s3_encryption = filter tfplan.resource_changes as _, rc {
-  rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
-  (rc.change.actions contains "create" or rc.change.actions contains "update")
+# Retorna encryption configs criadas ou alteradas
+get_encryptions = func() {
+  return filter tfplan.resource_changes as _, rc {
+    rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
+    (rc.change.actions contains "create" or rc.change.actions contains "update")
+  }
 }
+
+# Verifica se bucket possui encryption associada
+bucket_has_encryption = func(bucket, encryptions) {
+  return length(filter encryptions as _, enc {
+    enc.change.after.bucket is bucket.change.after.bucket
+  }) > 0
+}
+
+# Extrai algoritmo de forma segura
+get_algorithm = func(enc) {
+  if enc.change.after.rule is not defined or
+     length(enc.change.after.rule) is 0 {
+    return null
+  }
+
+  rule_block = enc.change.after.rule[0]
+
+  if rule_block.apply_server_side_encryption_by_default is not defined or
+     length(rule_block.apply_server_side_encryption_by_default) is 0 {
+    return null
+  }
+
+  return rule_block.apply_server_side_encryption_by_default[0].sse_algorithm
+}
+
+# Evaluation
+buckets     = get_buckets()
+encryptions = get_encryptions()
 
 # Buckets sem encryption
-buckets_without_encryption = filter s3_buckets as _, bucket {
-  length(filter s3_encryption as _, enc {
-    enc.change.after.bucket is bucket.change.after.bucket
-  }) is 0
+buckets_without_encryption = filter buckets as _, b {
+  not bucket_has_encryption(b, encryptions)
 }
 
 # Encryption inválida
-invalid_encryption = filter s3_encryption as _, enc {
-  enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "AES256" and
-  enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "aws:kms"
+invalid_encryption = filter encryptions as _, enc {
+  algo = get_algorithm(enc)
+  algo is null or not (algo in allowed_algorithms)
 }
 
+# Rule
 main = rule {
   length(buckets_without_encryption) is 0 and
   length(invalid_encryption) is 0
 }
 
+# Output
 if not main {
   print("X S3 - VIOLAÇÃO DETECTADA")
-  print("Todos os buckets devem possuir encryption configurada")
-  print("Algoritmo permitido: AES256 ou aws:kms")
+  print("Todos os buckets devem possuir encryption configurada.")
+  print("Algoritmos permitidos: AES256 ou aws:kms.")
 }
