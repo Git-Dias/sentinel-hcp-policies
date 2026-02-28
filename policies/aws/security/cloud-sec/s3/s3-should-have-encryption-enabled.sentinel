@@ -9,22 +9,34 @@ import "tfplan/v2" as tfplan
 allowed_algorithms = ["AES256", "aws:kms"]
 
 ###############################################################################
-# Fontes de dados
+# Fontes de dados — filtragem nativa via resource_changes
 ###############################################################################
 
-s3_buckets     = tfplan.find_resources("aws_s3_bucket")
-s3_encryptions = tfplan.find_resources("aws_s3_bucket_server_side_encryption_configuration")
+# Ações relevantes: recursos sendo criados ou atualizados
+relevant_actions = ["create", "update", "no-op"]
+
+s3_buckets = filter tfplan.resource_changes as _, rc {
+  rc.type is "aws_s3_bucket" and
+  rc.mode is "managed" and
+  rc.change.actions intersects relevant_actions
+}
+
+s3_encryptions = filter tfplan.resource_changes as _, rc {
+  rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
+  rc.mode is "managed" and
+  rc.change.actions intersects relevant_actions
+}
 
 ###############################################################################
 # Helper: valida se um bucket possui encryption configurada corretamente
 ###############################################################################
 
 has_valid_encryption = func(bucket) {
-  bucket_name = bucket.applied.bucket else "<unknown>"
+  bucket_name = bucket.change.after.bucket else "<unknown>"
 
-  # Filtra configurações de encryption que referenciam este bucket
+  # Filtra configurações que referenciam este bucket
   matching = filter s3_encryptions as _, enc {
-    enc.applied.bucket is bucket.applied.bucket
+    enc.change.after.bucket is bucket.change.after.bucket
   }
 
   if length(matching) is 0 {
@@ -32,8 +44,8 @@ has_valid_encryption = func(bucket) {
     return false
   }
 
-  enc     = values(matching)[0]
-  rules   = enc.applied.rule else []
+  enc   = values(matching)[0]
+  rules = enc.change.after.rule else []
 
   if length(rules) is 0 {
     print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' possui encryption configuration sem bloco 'rule' definido.")
@@ -50,7 +62,7 @@ has_valid_encryption = func(bucket) {
   algo = defaults[0].sse_algorithm else ""
 
   if algo not in allowed_algorithms {
-    print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' utiliza algoritmo inválido: '" + algo + "'. Permitidos: " + allowed_algorithms)
+    print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' utiliza algoritmo inválido: '" + algo + "'. Permitidos: " + string(allowed_algorithms))
     return false
   }
 
