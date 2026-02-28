@@ -4,69 +4,57 @@ import "tfplan/v2" as tfplan
 
 allowed_algorithms = ["AES256", "aws:kms"]
 
-# Helpers
-# Retorna buckets criados ou alterados
-get_buckets = func() {
-  return filter tfplan.resource_changes as _, rc {
-    rc.type is "aws_s3_bucket" and
-    (rc.change.actions contains "create" or rc.change.actions contains "update")
-  }
+#
+# Buckets criados ou alterados
+#
+s3_buckets = filter tfplan.resource_changes as _, rc {
+  rc.type is "aws_s3_bucket" and
+  (rc.change.actions contains "create" or rc.change.actions contains "update")
 }
 
-# Retorna encryption configs criadas ou alteradas
-get_encryptions = func() {
-  return filter tfplan.resource_changes as _, rc {
-    rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
-    (rc.change.actions contains "create" or rc.change.actions contains "update")
-  }
+#
+# Encryption configs criadas ou alteradas
+#
+s3_encryptions = filter tfplan.resource_changes as _, rc {
+  rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
+  (rc.change.actions contains "create" or rc.change.actions contains "update")
 }
 
-# Verifica se bucket possui encryption associada
-bucket_has_encryption = func(bucket, encryptions) {
-  return length(filter encryptions as _, enc {
+#
+# Buckets sem encryption associada
+#
+buckets_without_encryption = filter s3_buckets as _, bucket {
+  length(filter s3_encryptions as _, enc {
     enc.change.after.bucket is bucket.change.after.bucket
-  }) > 0
+  }) is 0
 }
 
-# Extrai algoritmo de forma segura
-get_algorithm = func(enc) {
-  if enc.change.after.rule is not defined or
-     length(enc.change.after.rule) is 0 {
-    return null
-  }
+#
+# Encryption inválida (null-safe e sem atribuição)
+#
+invalid_encryption = filter s3_encryptions as _, enc {
 
-  rule_block = enc.change.after.rule[0]
-
-  if rule_block.apply_server_side_encryption_by_default is not defined or
-     length(rule_block.apply_server_side_encryption_by_default) is 0 {
-    return null
-  }
-
-  return rule_block.apply_server_side_encryption_by_default[0].sse_algorithm
+  enc.change.after.rule is not defined or
+  length(enc.change.after.rule) is 0 or
+  enc.change.after.rule[0].apply_server_side_encryption_by_default is not defined or
+  length(enc.change.after.rule[0].apply_server_side_encryption_by_default) is 0 or
+  not (
+    enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm
+    in allowed_algorithms
+  )
 }
 
-# Evaluation
-buckets     = get_buckets()
-encryptions = get_encryptions()
-
-# Buckets sem encryption
-buckets_without_encryption = filter buckets as _, b {
-  not bucket_has_encryption(b, encryptions)
-}
-
-# Encryption inválida
-invalid_encryption = filter encryptions as _, enc {
-  algo = get_algorithm(enc)
-  algo is null or not (algo in allowed_algorithms)
-}
-
-# Rule
+#
+# Regra principal
+#
 main = rule {
   length(buckets_without_encryption) is 0 and
   length(invalid_encryption) is 0
 }
 
+#
 # Output
+#
 if not main {
   print("X S3 - VIOLAÇÃO DETECTADA")
   print("Todos os buckets devem possuir encryption configurada.")
