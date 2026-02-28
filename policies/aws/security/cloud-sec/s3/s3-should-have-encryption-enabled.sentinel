@@ -1,114 +1,135 @@
 # S3 Buckets should have encryption enabled at rest with AWS KMS Key
 
-import "tfconfig/v2" as tfconfig
-import "tfresources" as tf
-import "collection" as collection
-import "collection/maps" as maps
+import "tfplan/v2" as tfplan
 import "strings"
-import "types"
 
-# Constants
+###############################################################################
+# Constantes
+###############################################################################
 
 const = {
-	"policy_name":                                                 "s3-bucket-should-be-encrypted-at-rest",
-	"message":                                                     "S3 Buckets should have encryption enabled at rest with AWS KMS Key. Refer to https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-17 for more details.",
-	"resource_aws_s3_bucket":                                      "aws_s3_bucket",
-	"resource_aws_s3_bucket_server_side_encryption_configuration": "aws_s3_bucket_server_side_encryption_configuration",
-	"address":        "address",
-	"module_address": "module_address",
-	"module_prefix":  "module.",
-	"rule":           "rule",
-	"apply_server_side_encryption_by_default": "apply_server_side_encryption_by_default",
-	"sse_algorithm":                           "sse_algorithm",
-	"kms_master_key_id":                       "kms_master_key_id",
-	"aes256":                                  "AES256",
-	"default_kms_key":                         "aws/s3",
+	"policy_name": "s3-bucket-should-be-encrypted-at-rest",
+	"message":     "S3 Buckets devem ter criptografia habilitada com AWS KMS Key própria. Ref: https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-17",
+
+	"resource_s3_bucket":     "aws_s3_bucket",
+	"resource_s3_encryption": "aws_s3_bucket_server_side_encryption_configuration",
+
+	"relevant_actions": ["create", "update", "no-op"],
+	"allowed_algorithm": "aws:kms",
+	"default_kms_key":   "aws/s3",
 }
 
-# Functions
+###############################################################################
+# Helpers
+###############################################################################
 
-sanitize_compliant_s3_bucket_address = func(res) {
-	module_addr = res[const.module_address]
-
-	# Bucket definido como valor literal não pode ser referenciado por endereço
-	if (res.config.bucket.constant_value else "") is not "" {
-		return ""
-	}
-
-	rule_block = maps.get(res.config, const.rule, [])
-	if rule_block is empty {
-		return ""
-	}
-
-	apply_server_side_encryption_values = maps.get(rule_block[0], const.apply_server_side_encryption_by_default, [])
-	if apply_server_side_encryption_values is empty {
-		return ""
-	}
-
-	sse_algorithm = (maps.get(apply_server_side_encryption_values[0], const.sse_algorithm, {})).constant_value else ""
-	if sse_algorithm is empty or sse_algorithm is const.aes256 {
-		return ""
-	}
-
-	# Validação do KMS key — separada em steps para evitar undefined em condições compostas
-	kms_key_obj = maps.get(apply_server_side_encryption_values[0], const.kms_master_key_id, {})
-	if kms_key_obj is empty {
-		return ""
-	}
-
-	kms_key_value = kms_key_obj.constant_value else ""
-	if kms_key_value is empty {
-		return ""
-	}
-	if kms_key_value is const.default_kms_key {
-		return ""
-	}
-
-	# Monta o endereço do bucket referenciado
-	s3_bucket_reference = res.config.bucket.references[1] else ""
-	if s3_bucket_reference is empty {
-		return ""
-	}
-
-	if not strings.has_prefix(res[const.address], const.module_prefix) {
-		return s3_bucket_reference
-	}
-
-	return module_addr + "." + s3_bucket_reference
+# Filtra apenas recursos com ações relevantes ao plano
+is_relevant = func(rc) {
+	return rc.change.actions contains "create" or
+		rc.change.actions contains "update" or
+		rc.change.actions contains "no-op"
 }
 
-# Variables
-
-config_resources                     = tf.config(tfconfig.resources)
-bucket_resources                     = config_resources.type(const.resource_aws_s3_bucket).resources
-bucket_encryption_resources          = config_resources.type(const.resource_aws_s3_bucket_server_side_encryption_configuration).resources
-
-s3_bucket_addresses_with_encryption = map bucket_encryption_resources as _, res {
-	sanitize_compliant_s3_bucket_address(res)
+# Normaliza o endereço removendo índices (ex: module.s3[0] → module.s3)
+normalize_address = func(addr) {
+	parts = strings.split(addr, ".")
+	result = []
+	for parts as part {
+		append(result, strings.split(part, "[")[0])
+	}
+	return strings.join(result, ".")
 }
 
-violations = filter bucket_resources as _, res {
-	res.address not in s3_bucket_addresses_with_encryption
+# Extrai o module_address normalizado do resource_change
+module_prefix_of = func(rc) {
+	# module_address pode ser "module.s3[0]" → normaliza para "module.s3"
+	raw = rc.module_address else ""
+	parts = strings.split(raw, ".")
+	result = []
+	for parts as part {
+		append(result, strings.split(part, "[")[0])
+	}
+	return strings.join(result, ".")
 }
 
-summary = {
-	"policy_name": const.policy_name,
-	"violations": map violations as _, v {
-		{
-			"address":        v.address,
-			"module_address": v.module_address,
-			"message":        const.message,
-		}
-	},
+###############################################################################
+# Recursos planejados
+###############################################################################
+
+s3_buckets = filter tfplan.resource_changes as _, rc {
+	rc.type is const.resource_s3_bucket and
+	rc.mode is "managed" and
+	is_relevant(rc)
 }
+
+s3_encryptions = filter tfplan.resource_changes as _, rc {
+	rc.type is const.resource_s3_encryption and
+	rc.mode is "managed" and
+	is_relevant(rc)
+}
+
+###############################################################################
+# Validação por bucket
+###############################################################################
+
+has_valid_encryption = func(bucket) {
+	bucket_name   = bucket.change.after.bucket else "<unknown>"
+	bucket_module = module_prefix_of(bucket)
+
+	# Busca configuração de encryption no mesmo módulo que o bucket
+	matching = (filter s3_encryptions as _, enc {
+		module_prefix_of(enc) is bucket_module and
+		(enc.change.after.bucket else "") is not ""
+	}) else {}
+
+	if length(matching) is 0 {
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': sem aws_s3_bucket_server_side_encryption_configuration associada.")
+		return false
+	}
+
+	enc   = values(matching)[0]
+	rules = enc.change.after.rule else []
+
+	if length(rules) is 0 {
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': bloco 'rule' ausente na encryption configuration.")
+		return false
+	}
+
+	defaults = rules[0].apply_server_side_encryption_by_default else []
+
+	if length(defaults) is 0 {
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': 'apply_server_side_encryption_by_default' não configurado.")
+		return false
+	}
+
+	algo = defaults[0].sse_algorithm else ""
+
+	if algo is not const.allowed_algorithm {
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': algoritmo '" + algo + "' não permitido. Exigido: aws:kms.")
+		return false
+	}
+
+	kms_key = defaults[0].kms_master_key_id else ""
+
+	if kms_key is empty {
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': kms_master_key_id não definido.")
+		return false
+	}
+
+	if kms_key is const.default_kms_key {
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': uso da chave padrão AWS 'aws/s3' não permitido. Use uma KMS Key própria.")
+		return false
+	}
+
+	return true
+}
+
+###############################################################################
+# Regra principal
+###############################################################################
 
 main = rule {
-	violations is empty
-}
-
-if not main {
-	print("X S3 - VIOLAÇÃO DETECTADA")
-	print("   S3 Buckets devem ter criptografia habilitada com AWS KMS Key")
-	print("   Consulte o baseline de Segurança para mais informações")
-	print(" ")
+	all s3_buckets as _, bucket {
+		has_valid_encryption(bucket)
+	}
 }
