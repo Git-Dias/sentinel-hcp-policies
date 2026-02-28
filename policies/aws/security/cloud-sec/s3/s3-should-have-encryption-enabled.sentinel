@@ -1,42 +1,40 @@
-# S3 buckets must have server-side encryption enabled
+# S3 buckets must have encryption enabled (AES256 or aws:kms)
 
 import "tfplan/v2" as tfplan
 
 allowed_algorithms = ["AES256", "aws:kms"]
 
 #
-# Buckets criados ou alterados
+# Busca todos os buckets planejados
 #
-s3_buckets = filter tfplan.resource_changes as _, rc {
-  rc.type is "aws_s3_bucket" and
-  (rc.change.actions contains "create" or rc.change.actions contains "update")
-} else []
-
-s3_encryptions = filter tfplan.resource_changes as _, rc {
-  rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
-  (rc.change.actions contains "create" or rc.change.actions contains "update")
-} else []
+s3_buckets = tfplan.find_resources("aws_s3_bucket")
 
 #
-# Buckets sem encryption associada
+# Busca todas as configurações de encryption
+#
+s3_encryptions = tfplan.find_resources("aws_s3_bucket_server_side_encryption_configuration")
+
+#
+# Bucket sem encryption
 #
 buckets_without_encryption = filter s3_buckets as _, bucket {
   length(filter s3_encryptions as _, enc {
-    enc.change.after.bucket is bucket.change.after.bucket
+    enc.applied.bucket is bucket.applied.bucket
   }) is 0
 }
 
 #
-# Encryption inválida (null-safe e sem atribuição)
+# Encryption inválida
 #
 invalid_encryption = filter s3_encryptions as _, enc {
-  enc.change.after.rule is not defined or
-  length(enc.change.after.rule) is 0 or
-  enc.change.after.rule[0].apply_server_side_encryption_by_default is not defined or
-  length(enc.change.after.rule[0].apply_server_side_encryption_by_default) is 0 or
-  enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "AES256" and
-  enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "aws:kms"
+  enc.applied.rule is not defined or
+  length(enc.applied.rule) is 0 or
+  enc.applied.rule[0].apply_server_side_encryption_by_default is not defined or
+  length(enc.applied.rule[0].apply_server_side_encryption_by_default) is 0 or
+  enc.applied.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "AES256" and
+  enc.applied.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "aws:kms"
 }
+
 #
 # Regra principal
 #
