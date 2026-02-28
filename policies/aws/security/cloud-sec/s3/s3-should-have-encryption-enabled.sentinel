@@ -41,9 +41,10 @@ s3_encryptions = filter tfplan.resource_changes as _, rc {
 has_valid_encryption = func(bucket) {
   bucket_name = bucket.change.after.bucket else "<unknown>"
 
-  matching = filter s3_encryptions as _, enc {
-    enc.change.after.bucket is bucket.change.after.bucket
-  }
+  # Guarda com else {} garante coleção vazia caso filter retorne undefined
+  matching = (filter s3_encryptions as _, enc {
+    (enc.change.after.bucket else "") is bucket_name
+  }) else {}
 
   if length(matching) is 0 {
     print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' não possui aws_s3_bucket_server_side_encryption_configuration associada.")
@@ -51,14 +52,14 @@ has_valid_encryption = func(bucket) {
   }
 
   enc   = values(matching)[0]
-  rules = enc.change.after.rule else []
+  rules = (enc.change.after.rule else []) else []
 
   if length(rules) is 0 {
     print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' possui encryption configuration sem bloco 'rule' definido.")
     return false
   }
 
-  defaults = rules[0].apply_server_side_encryption_by_default else []
+  defaults = (rules[0].apply_server_side_encryption_by_default else []) else []
 
   if length(defaults) is 0 {
     print("VIOLATION [S3-ENCRYPTION] Bucket '" + bucket_name + "' não possui 'apply_server_side_encryption_by_default' configurado.")
