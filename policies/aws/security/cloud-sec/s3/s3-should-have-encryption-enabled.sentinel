@@ -37,10 +37,8 @@ invalid_encryption = filter s3_encryptions as _, enc {
   length(enc.change.after.rule) is 0 or
   enc.change.after.rule[0].apply_server_side_encryption_by_default is not defined or
   length(enc.change.after.rule[0].apply_server_side_encryption_by_default) is 0 or
-  (
-    enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "AES256" and
-    enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "aws:kms"
-  )
+  enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "AES256" and
+  enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "aws:kms"
 }
 #
 # Regra principal
