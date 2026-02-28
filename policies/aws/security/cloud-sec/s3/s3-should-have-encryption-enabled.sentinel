@@ -9,22 +9,29 @@ import "tfplan/v2" as tfplan
 allowed_algorithms = ["AES256", "aws:kms"]
 
 ###############################################################################
-# Fontes de dados — filtragem nativa via resource_changes
+# Helper: verifica se o resource_change possui ação relevante
 ###############################################################################
 
-# Ações relevantes: recursos sendo criados ou atualizados
-relevant_actions = ["create", "update", "no-op"]
+is_relevant_action = func(rc) {
+  return rc.change.actions contains "create" or
+         rc.change.actions contains "update" or
+         rc.change.actions contains "no-op"
+}
+
+###############################################################################
+# Fontes de dados — filtragem nativa via resource_changes
+###############################################################################
 
 s3_buckets = filter tfplan.resource_changes as _, rc {
   rc.type is "aws_s3_bucket" and
   rc.mode is "managed" and
-  rc.change.actions intersects relevant_actions
+  is_relevant_action(rc)
 }
 
 s3_encryptions = filter tfplan.resource_changes as _, rc {
   rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
   rc.mode is "managed" and
-  rc.change.actions intersects relevant_actions
+  is_relevant_action(rc)
 }
 
 ###############################################################################
@@ -34,7 +41,6 @@ s3_encryptions = filter tfplan.resource_changes as _, rc {
 has_valid_encryption = func(bucket) {
   bucket_name = bucket.change.after.bucket else "<unknown>"
 
-  # Filtra configurações que referenciam este bucket
   matching = filter s3_encryptions as _, enc {
     enc.change.after.bucket is bucket.change.after.bucket
   }
