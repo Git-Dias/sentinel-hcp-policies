@@ -8,13 +8,10 @@ import "strings"
 ###############################################################################
 
 const = {
-	"policy_name": "s3-bucket-should-be-encrypted-at-rest",
-	"message":     "S3 Buckets devem ter criptografia habilitada com AWS KMS Key própria. Ref: https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-17",
-
+	"policy_name":       "s3-bucket-should-be-encrypted-at-rest",
+	"message":           "S3 Buckets devem ter criptografia habilitada com AWS KMS Key própria. Ref: https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-17",
 	"resource_s3_bucket":     "aws_s3_bucket",
 	"resource_s3_encryption": "aws_s3_bucket_server_side_encryption_configuration",
-
-	"relevant_actions": ["create", "update", "no-op"],
 	"allowed_algorithm": "aws:kms",
 	"default_kms_key":   "aws/s3",
 }
@@ -23,28 +20,15 @@ const = {
 # Helpers
 ###############################################################################
 
-# Filtra apenas recursos com ações relevantes ao plano
 is_relevant = func(rc) {
 	return rc.change.actions contains "create" or
 		rc.change.actions contains "update" or
 		rc.change.actions contains "no-op"
 }
 
-# Normaliza o endereço removendo índices (ex: module.s3[0] → module.s3)
-normalize_address = func(addr) {
-	parts = strings.split(addr, ".")
-	result = []
-	for parts as part {
-		append(result, strings.split(part, "[")[0])
-	}
-	return strings.join(result, ".")
-}
-
-# Extrai o module_address normalizado do resource_change
-module_prefix_of = func(rc) {
-	# module_address pode ser "module.s3[0]" → normaliza para "module.s3"
-	raw = rc.module_address else ""
-	parts = strings.split(raw, ".")
+# Normaliza module_address removendo índices: "module.s3[0]" → "module.s3"
+normalize_module = func(addr) {
+	parts  = strings.split(addr, ".")
 	result = []
 	for parts as part {
 		append(result, strings.split(part, "[")[0])
@@ -69,55 +53,61 @@ s3_encryptions = filter tfplan.resource_changes as _, rc {
 }
 
 ###############################################################################
+# Monta índice: module_address_normalizado → encryption resource
+# Permite lookup O(1) por módulo ao invés de filter aninhado
+###############################################################################
+
+encryption_by_module = {}
+for s3_encryptions as _, enc {
+	mod = normalize_module(enc.module_address else "")
+	encryption_by_module[mod] = enc
+}
+
+###############################################################################
 # Validação por bucket
 ###############################################################################
 
 has_valid_encryption = func(bucket) {
-	bucket_name   = bucket.change.after.bucket else "<unknown>"
-	bucket_module = module_prefix_of(bucket)
+	bucket_addr = bucket.address else "<unknown>"
+	bucket_mod  = normalize_module(bucket.module_address else "")
 
-	# Busca configuração de encryption no mesmo módulo que o bucket
-	matching = (filter s3_encryptions as _, enc {
-		module_prefix_of(enc) is bucket_module and
-		(enc.change.after.bucket else "") is not ""
-	}) else {}
+	enc = encryption_by_module[bucket_mod] else null
 
-	if length(matching) is 0 {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': sem aws_s3_bucket_server_side_encryption_configuration associada.")
+	if enc is null {
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': sem aws_s3_bucket_server_side_encryption_configuration no módulo '" + bucket_mod + "'.")
 		return false
 	}
 
-	enc   = values(matching)[0]
 	rules = enc.change.after.rule else []
 
 	if length(rules) is 0 {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': bloco 'rule' ausente na encryption configuration.")
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': bloco 'rule' ausente na encryption configuration.")
 		return false
 	}
 
 	defaults = rules[0].apply_server_side_encryption_by_default else []
 
 	if length(defaults) is 0 {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': 'apply_server_side_encryption_by_default' não configurado.")
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': 'apply_server_side_encryption_by_default' não configurado.")
 		return false
 	}
 
 	algo = defaults[0].sse_algorithm else ""
 
 	if algo is not const.allowed_algorithm {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': algoritmo '" + algo + "' não permitido. Exigido: aws:kms.")
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': algoritmo '" + algo + "' não permitido. Exigido: aws:kms.")
 		return false
 	}
 
 	kms_key = defaults[0].kms_master_key_id else ""
 
 	if kms_key is empty {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': kms_master_key_id não definido.")
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': kms_master_key_id não definido.")
 		return false
 	}
 
 	if kms_key is const.default_kms_key {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_name + "': uso da chave padrão AWS 'aws/s3' não permitido. Use uma KMS Key própria.")
+		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': chave padrão 'aws/s3' não permitida. Use uma KMS Key própria.")
 		return false
 	}
 
