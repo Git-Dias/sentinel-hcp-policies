@@ -10,15 +10,12 @@ allowed_algorithms = ["AES256", "aws:kms"]
 s3_buckets = filter tfplan.resource_changes as _, rc {
   rc.type is "aws_s3_bucket" and
   (rc.change.actions contains "create" or rc.change.actions contains "update")
-}
+} else []
 
-#
-# Encryption configs criadas ou alteradas
-#
 s3_encryptions = filter tfplan.resource_changes as _, rc {
   rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
   (rc.change.actions contains "create" or rc.change.actions contains "update")
-}
+} else []
 
 #
 # Buckets sem encryption associada
