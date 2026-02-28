@@ -2,29 +2,29 @@
 
 import "tfplan/v2" as tfplan
 
-# Todos os buckets sendo criados ou atualizados
+# Buckets sendo criados ou atualizados
 s3_buckets = filter tfplan.resource_changes as _, rc {
   rc.type is "aws_s3_bucket" and
   (rc.change.actions contains "create" or rc.change.actions contains "update")
 }
 
-# Todas as configurações de encryption
+# Encryption configs sendo criadas ou atualizadas
 s3_encryption = filter tfplan.resource_changes as _, rc {
   rc.type is "aws_s3_bucket_server_side_encryption_configuration" and
   (rc.change.actions contains "create" or rc.change.actions contains "update")
 }
 
-# Bucket sem encryption (comparação por referência)
+# Buckets sem encryption
 buckets_without_encryption = filter s3_buckets as _, bucket {
   length(filter s3_encryption as _, enc {
     enc.change.after.bucket is bucket.change.after.bucket
   }) is 0
 }
 
-# Encryption com algoritmo inválido
+# Encryption inválida
 invalid_encryption = filter s3_encryption as _, enc {
-  algo = enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm
-  algo is not "AES256" and algo is not "aws:kms"
+  enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "AES256" and
+  enc.change.after.rule[0].apply_server_side_encryption_by_default[0].sse_algorithm is not "aws:kms"
 }
 
 main = rule {
