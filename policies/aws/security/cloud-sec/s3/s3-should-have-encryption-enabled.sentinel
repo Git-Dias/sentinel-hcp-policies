@@ -1,12 +1,10 @@
-# S3 Buckets should have encryption enabled at rest with AWS KMS Key
+# S3 Buckets devem ter criptografia habilitada com AWS KMS Key própria
 
+# Imports
 import "tfplan/v2" as tfplan
 import "strings"
 
-###############################################################################
-# Constantes
-###############################################################################
-
+# Constants
 const = {
 	"policy_name":       "s3-bucket-should-be-encrypted-at-rest",
 	"message":           "S3 Buckets devem ter criptografia habilitada com AWS KMS Key própria. Ref: https://docs.aws.amazon.com/securityhub/latest/userguide/s3-controls.html#s3-17",
@@ -16,10 +14,7 @@ const = {
 	"default_kms_key":   "aws/s3",
 }
 
-###############################################################################
-# Helpers
-###############################################################################
-
+# Helper functions
 is_relevant = func(rc) {
 	return rc.change.actions contains "create" or
 		rc.change.actions contains "update" or
@@ -36,10 +31,7 @@ normalize_module = func(addr) {
 	return strings.join(result, ".")
 }
 
-###############################################################################
 # Recursos planejados
-###############################################################################
-
 s3_buckets = filter tfplan.resource_changes as _, rc {
 	rc.type is const.resource_s3_bucket and
 	rc.mode is "managed" and
@@ -52,21 +44,14 @@ s3_encryptions = filter tfplan.resource_changes as _, rc {
 	is_relevant(rc)
 }
 
-###############################################################################
 # Monta índice: module_address_normalizado → encryption resource
-# Permite lookup O(1) por módulo ao invés de filter aninhado
-###############################################################################
-
 encryption_by_module = {}
 for s3_encryptions as _, enc {
 	mod = normalize_module(enc.module_address else "")
 	encryption_by_module[mod] = enc
 }
 
-###############################################################################
 # Validação por bucket
-###############################################################################
-
 has_valid_encryption = func(bucket) {
 	bucket_addr = bucket.address else "<unknown>"
 	bucket_mod  = normalize_module(bucket.module_address else "")
@@ -81,43 +66,55 @@ has_valid_encryption = func(bucket) {
 	rules = enc.change.after.rule else []
 
 	if length(rules) is 0 {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': bloco 'rule' ausente na encryption configuration.")
+		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': bloco 'rule' ausente na encryption configuration.")
+		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
+		print("   Consulte o baseline de Segurança para mais informações")
+		print(" ")
 		return false
 	}
 
 	defaults = rules[0].apply_server_side_encryption_by_default else []
 
 	if length(defaults) is 0 {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': 'apply_server_side_encryption_by_default' não configurado.")
+		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': 'apply_server_side_encryption_by_default' não configurado.")
+		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
+		print("   Consulte o baseline de Segurança para mais informações")
+		print(" ")
 		return false
 	}
 
 	algo = defaults[0].sse_algorithm else ""
 
 	if algo is not const.allowed_algorithm {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': algoritmo '" + algo + "' não permitido. Exigido: aws:kms.")
+		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': algoritmo '" + algo + "' não permitido. Exigido: aws:kms.")
+		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
+		print("   Consulte o baseline de Segurança para mais informações")
+		print(" ")
 		return false
 	}
 
 	kms_key = defaults[0].kms_master_key_id else ""
 
 	if kms_key is empty {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': kms_master_key_id não definido.")
+		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': kms_master_key_id não definido.")
+		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
+		print("   Consulte o baseline de Segurança para mais informações")
+		print(" ")
 		return false
 	}
 
 	if kms_key is const.default_kms_key {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': chave padrão 'aws/s3' não permitida. Use uma KMS Key própria.")
+		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': chave padrão 'aws/s3' não permitida. Use uma KMS Key própria.")
+		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
+		print("   Consulte o baseline de Segurança para mais informações")
+		print(" ")
 		return false
 	}
 
 	return true
 }
 
-###############################################################################
-# Regra principal
-###############################################################################
-
+# Regra Principal
 main = rule {
 	all s3_buckets as _, bucket {
 		has_valid_encryption(bucket)
