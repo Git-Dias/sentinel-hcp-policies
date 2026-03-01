@@ -59,56 +59,65 @@ has_valid_encryption = func(bucket) {
 	enc = encryption_by_module[bucket_mod] else null
 
 	if enc is null {
-		print("VIOLATION [S3-ENCRYPTION] '" + bucket_addr + "': sem aws_s3_bucket_server_side_encryption_configuration no módulo '" + bucket_mod + "'.")
-		return false
+	  print("X S3 - VIOLAÇÃO DETECTADA")
+	  print("   O Bucket não possui configuração de criptografia habilitada")
+	  print("   Buckets S3 devem utilizar AWS KMS com chave própria")
+	  print("   Consulte o baseline de Segurança para mais informações")
+	  print(" ")
+	  return false
 	}
 
 	rules = enc.change.after.rule else []
 
 	if length(rules) is 0 {
-		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': bloco 'rule' ausente na encryption configuration.")
-		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
-		print("   Consulte o baseline de Segurança para mais informações")
-		print(" ")
-		return false
+	  print("X S3 - VIOLAÇÃO DETECTADA")
+	  print("   O Bucket não possui regra de criptografia configurada")
+	  print("   É obrigatório definir criptografia com AWS KMS")
+	  print("   Consulte o baseline de Segurança para mais informações")
+	  print(" ")
+	  return false
 	}
 
 	defaults = rules[0].apply_server_side_encryption_by_default else []
 
 	if length(defaults) is 0 {
-		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': 'apply_server_side_encryption_by_default' não configurado.")
-		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
-		print("   Consulte o baseline de Segurança para mais informações")
-		print(" ")
-		return false
+	  print("X S3 - VIOLAÇÃO DETECTADA")
+	  print("   O Bucket não define criptografia padrão para novos objetos")
+	  print("   É obrigatório utilizar AWS KMS como criptografia padrão")
+	  print("   Consulte o baseline de Segurança para mais informações")
+	  print(" ")
+	  return false
 	}
 
 	algo = defaults[0].sse_algorithm else ""
 
 	if algo is not const.allowed_algorithm {
-		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': algoritmo '" + algo + "' não permitido. Exigido: aws:kms.")
-		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
-		print("   Consulte o baseline de Segurança para mais informações")
-		print(" ")
-		return false
+	  print("X S3 - VIOLAÇÃO DETECTADA")
+	  print("   O Bucket utiliza algoritmo '" + algo + "' não permitido")
+	  print("   É obrigatório utilizar 'aws:kms'")
+	  print("   Consulte o baseline de Segurança para mais informações")
+	  print(" ")
+	  return false
 	}
 
 	kms_key = defaults[0].kms_master_key_id else ""
 
 	if kms_key is empty {
-		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': kms_master_key_id não definido.")
-		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
-		print("   Consulte o baseline de Segurança para mais informações")
-		print(" ")
-		return false
+	  print("X S3 - VIOLAÇÃO DETECTADA")
+	  print("   O Bucket não possui KMS Key definida")
+	  print("   É obrigatório utilizar uma chave KMS própria")
+	  print("   Consulte o baseline de Segurança para mais informações")
+	  print(" ")
+	  return false
 	}
 
 	if kms_key is const.default_kms_key {
-		print("X  [S3 - VIOLAÇÃO DETECTADA] '" + bucket_addr + "': chave padrão 'aws/s3' não permitida. Use uma KMS Key própria.")
-		print("   Buckests S3 devem ter criptografia habilitada com AWS KMS Key própria")
-		print("   Consulte o baseline de Segurança para mais informações")
-		print(" ")
-		return false
+	  print("X S3 - VIOLAÇÃO DETECTADA")
+	  print("   O Bucket utiliza a chave padrão 'aws/s3'")
+	  print("   É obrigatório utilizar uma KMS Key própria gerenciada pela organização")
+	  print("   Consulte o baseline de Segurança para mais informações")
+	  print(" ")
+	  return false
 	}
 
 	return true
