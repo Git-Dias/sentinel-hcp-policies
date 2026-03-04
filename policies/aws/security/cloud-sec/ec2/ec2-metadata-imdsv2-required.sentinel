@@ -42,18 +42,6 @@ for ec2_instance_resources as _, res {
 	append(violations, res)
 }
 
-summary = {
-	"policy_name": const.policy_name,
-	"violations": map violations as _, v {
-		{
-			"address":        v.address,
-			"module_address": v.module_address,
-			"message":        const.message,
-		}
-	},
-}
-
-
 # Rules
 main = rule {
 	violations is empty
@@ -62,6 +50,11 @@ main = rule {
 if not main {
 	print("X EC2 - VIOLAÇÃO DETECTADA")
 	print("   Instancias EC2 devem ter o IMDSv2 habilitado")
+	print(" ")
 	print("   Consulte o baseline de Segurança para mais informações")
 	print(" ")
-}
+} else {
+	print("✓ EC2 - Nenhuma violação detectada")
+	print(" ")
+	print("   Todas as instancias EC2 estão configuradas para exigir o uso do IMDSv2 ou possuem uma configuração padrão que exige o uso do IMDSv2")
+} 	
